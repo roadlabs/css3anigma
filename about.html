@@ -1,0 +1,77 @@
+<html
+<head>
+    <title>About Anigma</title>
+    <link rel=stylesheet type="text/css" href="style.css">
+</head>
+<body>
+
+<div style="padding: 1em;">
+<h1>About</h1>
+Anigma is a test of various features that are proposed in CSS3.  In particular this was my own way of trying out the new <a href="http://www.w3.org/TR/css3-transitions/">css3-transitions</a> and <a href="http://www.w3.org/TR/css3-animations/">css3-animations</a>.  Anigma was tested on Arora, Safari and Google Chrome.
+<p>
+
+Some Easter Eggs features:<br>
+Hit the 'e' key to bring up a level editor.<br>
+Hit the 'k' key to bring up the debug form including a way to jump to any level you want.<br>
+
+<h4>SVG</h4>
+I hoped to have the game only use svg graphics, but currently there are some painting bugs related to transitions and svg images.  Once these are fixed in WebKit I will update the game to point to the svg files rather then the rendered png's.
+
+<h1>Credits</h1>
+Anigma is inspired by the game <a href="http://benjamin-meyer.blogspot.com/2007/03/anigma-game.html">Anigma</a> which is a game written in C++ using the Qt library.  None of the code in the C++ Anigma was re-used in the making of this Anigma only some of the levels and a few of the graphics.  The Javascript code here in this demo is under the BSD.
+
+<h4>Images</h4>
+The Jewel images and background came from the game <a href="http://benjamin-meyer.blogspot.com/2007/03/anigma-game.html">Gweled</a> and <a href="http://games.kde.org/game.php?game=klines">KLines</a>.  They are all under the GPLv2.
+
+<h4>Audio</h4>
+All of the background music is from <a href="http://8bitcollective.com">8bitcollective</a> and under the Creative Commons BY-NC-SA License.
+<ul>
+<li>First by <a href="http://8bitcollective.com/members/neil/">Neil</a>
+<li>Tiny Tunes by <a href="http://8bitcollective.com/members/FantomenK/">FantomenK</a>
+<li>Reflect 2 by <a href="http://8bitcollective.com/members/Nanoshine/">Nanoshine</a>
+<li>Neon Aurora by <a href="http://8bitcollective.com/members/Alpha+C/">Alpha C</a>
+<li>Wine Walls by <a href="http://8bitcollective.com/members/Siddhis/">Siddhis</a>
+<li>All Systems Go by <a href="http://8bitcollective.com/members/Emar/">Emar</a>
+<li>Aftershock Sunrise by <a href="http://8bitcollective.com/members/sleepy/">Sleepy</a>
+<li>Solo City by <a href="http://8bitcollective.com/members/Pompei/">Pompei</a>
+<li>Without You by <a href="http://8bitcollective.com/members/Pompei/">Pompei</a>
+<li>The Blackbird by <a href="http://8bitcollective.com/members/sailfish/">Sailfish</a>
+<li>Her Lazer Light Eyes by <a href="http://8bitcollective.com/music/Guest/186/">Nullsleep</a>
+</ul>
+
+<h1>Technical Details</h1>
+
+<h4>Movement</h4>
+The cursor and the jewel all have a transition property set on their top and left so when their position is changed via the mouse/keyboard they will slide across the screen.  When an action causes the board to change (such as moving a jewel to the left/right) a functions checks to see if anything should fall down one block and if so sets their top property causing a transition.
+
+<h4>Removing Jewels</h4>
+When two jewels of the same type are next to each other the opacity is set to 0 starting a transition.  The transition end event is used to actually remove the jewels from the dom allowing other jewels to fall down.
+
+<h4>Clock</h4>
+The countdown clock is a div that starts at the length of the screen and a background color of white.  When the level is loaded the transition time is set to the time allowed for the level, the color is then set to red and width of 0 starting the transition.  When the transition end event is fired it calls the function to drop the 'Out of time!' dialog.
+
+<h4>Score</h4>
+The score behaves similarly to the clock with a transition set on the width.
+
+<h4>Trap</h4>
+Use two background images with transitions followed by a change in id to a wall on the completion of the transition (via the end event).
+
+<h4>Fire & Crumble</h4>
+While this could have been done with an animated gif easily enough I tried out the CSS3 animations and setup keyframes to move the background offsets to the correct location in the image/sprite.
+
+<h4>Other</h4>
+Several other fun new properties were used including:
+<ul>
+<li>-webkit-background-size - cause the background image to scale to the width of the screen
+<li>-webkit-transform: - rotate the CSS3 logo 90 degres.
+<li>-webkit-border-radius and -webkit-box-shadow on the message box.
+<li>The HTML5 audio tag.
+</ul>
+
+<h1>Contact</h1>
+
+If you have any questions or feedback feel free to send me an <a href="mailto:ben@meyerhome.net">email</a>.
+
+</div>
+
+</body>

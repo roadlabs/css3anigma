@@ -1,0 +1,2 @@
+rsync --progress -a ./ toybin.org:~/www/icefox/anigma --exclude '.git'
+

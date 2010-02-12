@@ -1,0 +1,5 @@
+RewriteEngine on
+Options FollowSymLinks
+#RewriteBase /~ben/anigma_web/
+RewriteBase /anigma/
+RewriteRule ^levels/(.*)\.level$ cgi-bin/getlevel.cgi?$1 [env=LEVEL:$1]

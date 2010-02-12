@@ -1,362 +1,111 @@
 <html>
+
 <head>
-<style type="text/css">
-
-#board {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    background-image:url("../pics/graphics/background.png");
-    background-position: left top;
-    background-repeat: no-repeat;
-    background-attachment: absolute;
-    color: white;
-    clear: both;
-}
-
-div.gameobject {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-}
-
-#W,#M {
-    z-index: 0;
-    background-image:url('../pics/graphics/wall.png')
-}
-
-#Y { background-image:url("../pics/themes/Default/blue_small.png_") }
-#G { background-image:url("../pics/themes/Default/cyan_small.png_") }
-#B { background-image:url("../pics/themes/Default/green_small.png_") }
-#P { background-image:url("../pics/themes/Default/purple_small.png_") }
-#C { background-image:url("../pics/graphics/broken_wall.png") }
-
-#C,#P,#G,#Y,#B,#M {
-    z-index: 2;
-}
-#C,#P,#G,#Y,#B,#selector {
-    -webkit-transition: left 1s linear;
-    -webkit-transition: top 1s linear;
-    -webkit-transition: opacity .5s linear;
-}
-
-#M {
-    -webkit-transition: top 1s linear;
-}
-
-div#selector {
-  z-index: 1;
-  opacity: .5;
-}
-
-</style>
+    <title>Anigma</title>
+    <link rel=stylesheet type="text/css" href="style.css">
 </head>
-<body>
-<h1>Anigma</h1>
-<div id="clock">Time left:</div>
 
+<body>
+<div id="completed"></div>
+<div id="score"></div>
+
+<div id="backgrounddata">
+    <div id="title">Anigma</div>
+    <div id="currentLevel"></div>
+    <div id="css3Logo">CSS3</div>
+    <div id="story">While wondering in the woods Madelina's discovered a cave filled with jewels.  Help Madelina collect all of the jewels in each cavern by touching jewels of the same color together.<p>
+    Use the arrow keys or the mouse to select jewels and move them.<p>Hit 'E' to pull up the level editor and make your own levels.</div>
+</div>
 <div id="board">
+    <div id="launchgame">
+        <input id="play1" type="button" value="Play Game" onclick="launch(false)"><br>
+        <br>
+        <input id="play2" type="button" value="Play Game with Audio" onclick="launch(true)">
+    </div>
+    <div id="messagebox"></div>
+</div>
+<div id="clock"></div>
+
+
+<div id="restartLevel"><a href="javascript:restartLevel();">Restart Level</a></div>
+<div id="about"><a href="about.html">About / Credits</a></div>
+<div id="copyright">Copyright <a href="mailto:ben@meyerhome.net">Benjamin C. Meyer</a> 2010</div>
+
+<form id="debug">
+    <input id="level" type="text" value="101">
+    <input id="restartlevelbutton" type="button" value="Restart Level" onclick="restartLevel()">
+    <textarea id="levellog" cols=20 rows=2></textarea>
+    <div id="log"></div>
+</form>
+
+<form id="editor">
+    <textarea id="levelEditor" cols=15 rows=12></textarea>
+    <div>
+    <ul id="levelTypes">
+    <li>[reserved]-[reserved]-[reserved]-TIME
+    <li>B,R,Y,G,P,A,H,E - Jewels
+    <li>W - Wall
+    <li>T - Trap door
+    <li>F - Firepit
+    <li>C - Breakable Wall
+    <li>M - Elevator (not implemented)
+    </ul>
+    Created a good level?  <a href="mailto:ben+anigma@meyerhome.net">E-mail</a> it to me and I will add it to the list.
+    </div>
+    <input type="button" value="Load Level" onclick="loadLevelFile(document.getElementById('levelEditor').value)">
+</form>
+
+
+<div id="creditsbox">
+<div id="credits">
+<img id="whitel" src="png/jewel_white.png">
+<img id="whiter" src="png/jewel_white.png">
+<p>
+<p id = "creditsheader">
+Anigma
+</p>
+<p>
+<img id="blue" src="png/jewel_blue.png">
+Programmed by <a href="http://benjamin-meyer.blogspot.com">Benjamin Meyer</a>
+<p>
+<img id="cyan" src="png/jewel_cyan.png">
+Thanks to Jennifer Meyer for play testing
+<p>
+<img id="gray" src="png/jewel_gray.png">
+Inspired by the Sharp Zaurus game <a href="http://benjamin-meyer.blogspot.com/2007/03/anigma-game.html">Anigma</a> created by Walter Rawdanik
+<p>
+<img id="green" src="png/jewel_green.png">
+Background by Eugene Trounev
+<p>
+<img id="orange" src="png/jewel_orange.png">
+Jewels by Eugene Trounev and Sebastien Delestaing
+<p>
+<img id="purple" src="png/jewel_purple.png">
+Music:<br>
+First by <a href="http://8bitcollective.com/members/neil/">Neil</a>
+Tiny Tunes by <a href="http://8bitcollective.com/members/FantomenK/">FantomenK</a>
+Reflect 2 by <a href="http://8bitcollective.com/members/Nanoshine/">Nanoshine</a>
+Neon Aurora by <a href="http://8bitcollective.com/members/Alpha+C/">Alpha C</a>
+Wine Walls by <a href="http://8bitcollective.com/members/Siddhis/">Siddhis</a>
+All Systems Go by <a href="http://8bitcollective.com/members/Emar/">Emar</a>
+Aftershock Sunrise by <a href="http://8bitcollective.com/members/sleepy/">Sleepy</a>
+Solo City by <a href="http://8bitcollective.com/members/Pompei/">Pompei</a>
+Without You by <a href="http://8bitcollective.com/members/Pompei/">Pompei</a>
+The Blackbird by <a href="http://8bitcollective.com/members/sailfish/">Sailfish</a>
+Her Lazer Light Eyes by <a href="http://8bitcollective.com/music/Guest/186/">Nullsleep</a>
+<p>
+<img id="red" src="png/jewel_red.png">
+All artwork is under the GPLv2 license
+<p>
+<img id="yellow" src="png/jewel_yellow.png">
+Javascript is under the BSD license
+<p>
+<img id="white" src="png/jewel_white.png">
+Music is under the Creative Commons BY-NC-SA License
+<p>
+Thanks for playing!
+</div>
 </div>
 
-<script type="text/javascript">
-
-function loadGame() {
-    size = 20;
-    currentLevel = 1;
-    board = document.getElementById("board");
-    clock = document.getElementById("clock");
-    selector = document.getElementById("selector");
-
-    loadLevel();
-}
-
-function tick()
-{
-    clock.time -= 1;
-    clock.innerHTML = "Time left: " + clock.time + " seconds";
-    if (clock.time == 0) {
-        clearInterval(clock.clear)
-        clock.innerHTML = "Game Over";
-    }
-    for (var i = 0; i < movers.length; ++i) {
-        if (movers[i].direction) 
-            movers[i].style.posTop = movers[i].startAnimationY;
-        else
-            movers[i].style.posTop = movers[i].endAnimationY;
-        movers[i].direction = !movers[i].direction;
-    }
-    //checkGravity();
-}
-
-function broken_wall()
-{
-    crumble.style.backgroundPosition = 100 - crumble.time * size + " 0";
-    crumble.time++;
-    if (crumble.time == 6) {
-        clearInterval(crumble.clear)
-        crumble.parentNode.removeChild(crumble);
-        crumble = NaN;
-    }
-}
-
-function loadLevel()
-{
-    movers = new Array();
-    while ( board.childNodes.length >= 1 ) {
-        board.removeChild( board.firstChild );       
-    } 
-
-    if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    xmlhttp.open("GET", "levels/" + currentLevel + ".level", false);
-    xmlhttp.send(null);
-    var level = xmlhttp.responseText;
-
-    selector = document.createElement("div");
-    selector.className = "gameobject";
-    selector.id = "selector";
-    board.appendChild(selector);
-    selector.selected = true;
-    toggleSelection();
-
-    var rows = level.split("\n");
-    board.style.height = size * (rows.length - 2);
-    for (var i = 0; i < rows.length -1; ++i) {
-        var row = rows[i + 1];
-        for (var j = 0; j < row.length; ++j) {
-            board.style.width = size * row.length;
-            if (row[j] == '.')
-                continue;
-            var item = document.createElement("div");
-            if (row[j] != 'W') {
-                selector.style.posTop = i * size;
-                selector.style.posLeft = j * size;
-            }
-
-
-            if (row[j] != 'B'
-                && row[j] != 'Y'
-                && row[j] != 'G' 
-                && row[j] != 'P'
-                && row[j] != 'W'
-                && row[j] != 'C')
-                item.innerHTML = row[j];
-            item.innerHTML = row[j];
-            item.style.posTop = i * size;
-            item.style.posLeft = j * size;
-            item.className = "gameobject";
-            item.id = row[j];
-            item.gametype = row[j];
-
-            if (row[j] == 'M') {
-                item.direction = true;
-                item.startAnimationY = size * i;
-                item.endAnimationY = size * parseInt(row[j+3] + row[j+4]);
-                var first = row.substring(0, j);
-                var second = row.substring(j + 4);
-                row = first + second;
-                movers[movers.length] = item;
-            }
-            board.appendChild(item);
-        }
-    }
-    clearInterval(clock.clear)
-    clock.time = rows[0].split('-')[3];
-    clock.clear = setInterval('tick()', 1000);
-}
-
-
-function checkGravityOnNode(node)
-{
-    var x = node.style.posLeft;
-    var y = node.style.posTop;
-    var bNode = getGameElementAt(x, y + size);
-    if (!bNode && !node.animating) {
-        node.animating = true;
-        node.addEventListener('webkitTransitionEnd', function() {
-        node.animating = false;
-        checkGravityOnNode(this);
-        checkElement(this);
-        }, false);
-        node.style.posTop += size;
-        if (node == selector.selectedElement)
-            toggleSelection();
-    }
-}
-
-function checkGravity()
-{
-    for (var i = 0; i < board.childNodes.length; ++i) {
-        var node = board.childNodes[i];
-        switch (node.id) {
-           case 'B':
-           case 'Y':
-           case 'G':
-           case 'P':
-            break;
-           default:
-            continue;
-        }
-        checkGravityOnNode(node);
-    }
-}
-
-function checkLevel()
-{
-    for (var i = 0; i < board.childNodes.length; ++i) {
-        var node = board.childNodes[i];
-        if (node.className != "gameobject")
-            continue;
-        switch (node.id) {
-           case 'B':
-           case 'Y':
-           case 'G':
-           case 'P':
-            return;
-        }
-    }
-    ++currentLevel;
-    loadLevel();
-}
-
-function getGameElementAt(x, y)
-{
-    for (var i = 0; i < board.childNodes.length; ++i) {
-        var node = board.childNodes[i];
-        if (node.className != "gameobject")
-            continue;
-        if(node.id != 'selector'
-            && node.style.posTop == y
-            && node.style.posLeft == x)
-            return node;
-    }
-    return NaN;
-}
-
-function toggleSelection()
-{
-    if (selector.selected) {
-        selector.selected = false;
-        selector.style.backgroundColor = "white";
-    } else {
-        var node = getGameElementAt(selector.style.posLeft, selector.style.posTop);
-        if (node && node.id != 'W') {
-            selector.selectedElement = node;
-            selector.selected = true;
-            selector.style.backgroundColor = "red";
-        }
-    }
-}
-
-function removeJewel(node)
-{
-    node.addEventListener('webkitTransitionEnd', function() { this.parentNode.removeChild(this); }, false);
-    node.style.opacity = 0;
-}
-
-
-function checkElement(node)
-{
-    var x = node.style.posLeft;
-    var y = node.style.posTop;
-    var leftNode = getGameElementAt(x - size, y);
-    var removed = false;
-    if (leftNode && leftNode.id == node.id) {
-        removeJewel(leftNode);
-        removed = true;
-    }
-    var bNode = getGameElementAt(x, y + size);
-    if (bNode && bNode.id == node.id) {
-        removeJewel(bNode);
-        removed = true;
-    }
-    var rNode = getGameElementAt(x + size, y);
-    if (rNode && rNode.id == node.id) {
-        removeJewel(rNode);
-        removed = true;
-    }
-
-    if (bNode.id == 'C' ) {
-        crumble = bNode;
-        crumble.time = 0;
-        crumble.clear = setInterval('broken_wall()', 1000);
-    }
-
-    if (removed) {
-        removeJewel(node);
-        toggleSelection();
-    }
-}
-
-function moveSelection(x, y)
-{
-    var allow = true;
-    var newx =  selector.style.posLeft + x;
-    var newy =  selector.style.posTop + y;
-    if (newx < 0 || newy < 0
-        || newx > board.style.width || newy > board.style.height)
-        return;
-
-    if (selector.selected) {
-        if (y < 0)
-            allow = false;
-        var node = getGameElementAt(newx, newy);
-        if (node && node.gametype != ".") {
-            allow = false;
-        }
-    }
-
-    if (!allow)
-        return;
-    selector.style.posLeft = newx;
-    selector.style.posTop = newy;
-    if (selector.selected) {
-        var node = selector.selectedElement;
-        node.style.posLeft += x;
-        node.style.posTop += y;
-        checkElement(node);
-        checkLevel();
-    }
-}
-
-document.onkeyup = KeyCheck;       
-function KeyCheck()
-{
-    if (clock.time == 0)
-        return;
-    var KeyID = event.keyCode;
-    switch(KeyID)
-    {
-        case 32:  // Spacebar
-            toggleSelection();
-            break; 
-
-        case 37: // left
-            moveSelection(-size, 0);
-            break;
-
-        case 38: // up
-            moveSelection(0, -size);
-            break;
-
-        case 39: // right
-            moveSelection(size, 0);
-            break;
-
-        case 40: // down
-            moveSelection(0, size);
-            break;
-    }
-}
-</script>
-
-<p>
-<input type="button" value="Restart Level" onclick="loadLevel()">
-
-<script>
-loadGame();
-</script>
+<script src="anigma.js" language="javascript" type="text/javascript"></script>
 </html>
-
