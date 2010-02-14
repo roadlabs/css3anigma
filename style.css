@@ -1,11 +1,8 @@
 body {
-    padding: 0;
-    margin: 0;
-    background-color: black;
+    background-color: #2b3133;
     color: white;
-    background-image:url('png/background.png');
-    d-webkit-background-size: 100%;
-    dbackground-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
 }
 
 a:link {color:white;}
@@ -13,26 +10,25 @@ a:visited {color:white;}
 a:hover {color:white;}
 a:active {color:white;}
 
-#board {
-    position: relative;
-    margin-top: 5em;
-    padding: .25em;
-    background-position: left top;
+#game {
     background-repeat: no-repeat;
-    background-attachment: absolute;
-    color: white;
-    clear: both;
-    width: 500px;
-    height: 300px;
-    margin-left: 250px;
-    margin-top: 60px;
+    margin: 0 auto;
+    padding: 0;
+    border: 1px solid gray;
+    max-width: 1024px;
+    margin-top: 15%;
+    background-image: url('png/background.png');
+}
+
+#extra_bg {
+    z-index: -1;
 }
 
 #currentLevel { color: gray; }
 #currentLevel, #css3Logo, #title {
-    z-index: -1;
-    position: fixed;
-    margin: 1em;
+    float: left;
+    position: absolute;
+    margin: .5em;
     font-size: 30px;
     font-family: Serif;
     font-weight: bolder;
@@ -41,17 +37,49 @@ a:active {color:white;}
 #title {
     color: #414349;
     margin: 0;
+    margin-left: 20px;
     padding: 0;
     padding-left: 1em;
-    font-size: 120px;
+    font-size: 55pt;
 }
 
 #css3logo {
     color: #2B2B2B;
-    padding-top: 3em;
+    padding-top: 2em;
     position: absolute;
     font-size: 90px;
     -webkit-transform: rotate(90deg);
+}
+
+#story
+{
+    width: 8em;
+    padding-top: 1em;
+    padding-right: 1em;
+    float: right;
+}
+
+#launchgame
+{
+    position: relative;
+    margin: 0 auto;
+    margin-top: 8em;
+    padding: 2em;
+    text-align: center;
+    max-width: 340px;
+
+    opacity: 0.8;
+    background-color: black;
+    -webkit-border-radius: 10px;
+    border: 1px solid gray;
+    -webkit-box-shadow: 10px 10px 9px gray;
+}
+
+#board {
+    position: relative;
+    padding-top: 60px;
+    height: 360px;
+    margin: 0 auto;
 }
 
 div.gameobject {
@@ -138,16 +166,6 @@ div.gameobject {
     background-size: 200 40;
 }
 
-#Y { background-image: url('png/jewel_yellow.png'); }
-#P { background-image: url('png/jewel_orange.png'); }
-#B { background-image: url('png/jewel_blue.png'); }
-#G { background-image: url('png/jewel_green.png'); }
-#R { background-image: url('png/jewel_red.png'); }
-
-#A { background-image: url('png/jewel_white.png'); }
-#H { background-image: url('png/jewel_cyan.png'); }
-#E { background-image: url('png/jewel_gray.png'); }
-
 #C,#P,#G,#Y,#B,#R,#M,#A,#H,#E {
     z-index: 2;
 }
@@ -157,13 +175,13 @@ div.gameobject {
     -webkit-transition-timing-function: linear;
 }
 
-#completed {
+#finishedlevelanimation {
+    z-index: 500;
     position: fixed;
     left: -50;
     right: -50;
     width: 40px;
     height: 40px;
-    background-image: url('png/jewel_cyan.png');
     -webkit-transition-property: -webkit-transform, top, left;
     -webkit-transition-duration: 3s, 3s, 3s;
     -webkit-transition-timing-function: ease-in-out;
@@ -171,11 +189,10 @@ div.gameobject {
 
 #cursor {
     z-index: 5;
-    -webkit-transition-property: top, left, opacity;
+    -webkit-transition-property: top, left, background-image;
     -webkit-transition-duration: .1s, .1s, .2s;
-    background-image: url('png/cursor.png');
+    background-image: url('png/cursor_unselected.png');
     -webkit-transition-timing-function: linear;
-    opacity: 0.5;
 }
 
 #M {
@@ -191,50 +208,32 @@ div.gameobject {
 }
 
 #clock {
+    margin-top: 5px;
     background-color: white;
 }
 
 #score {
     -webkit-transition-duration: 1s;
-    background-color: green;
+    background-color: orange;
 }
 
 #restartLevel
 {
-    padding-top: .25em;
+    padding: .25em;
     text-align: center;
-}
-#backgrounddata {
-    width: 100%;
-    position: absolute;
 }
 
 #about {
+    font-size: small;
     float: left;
-    padding-left: 1em;
+    padding-left: 0.5em;
+    padding-bottom: 0.5em;
 }
 #copyright
 {
-    padding-right: 1em;
+    font-size: small;
+    padding-right: 0.5em;
     float: right;
-}
-#story
-{
-    width: 8em;
-    padding-top: 1em;
-    padding-right: 1em;
-    float: right;
-}
-
-#launchgame
-{
-    margin: 25%;
-    padding: 2em;
-    background-color: black;
-    -webkit-border-radius: 10px;
-    border: 1px solid gray;
-    -webkit-box-shadow: 10px 10px 9px gray;
-    text-align: center;
 }
 
 #messagebox
@@ -248,8 +247,8 @@ div.gameobject {
     margin-top: 5em;
     margin: 1em;
     font-size: 30pt;
-    opacity: 1;
-    top: -13em;
+    opacity: 0;
+    top: -14em;
 
     -webkit-transition-property: opacity, top;
     -webkit-transition-duration: 3s, 2s;
@@ -281,20 +280,22 @@ div.gameobject {
 
 #creditsbox {
     position: fixed;
-    left: 25%;
-    width: 500px;
+    left: 20%;
+    width: 60%;
+    min-width: 300px;
+    top: 0px;
+    opacity: 1;
+    background-color: black;
 }
 
 #credits {
+    background-color: black;
     display: none;
-    min-width: 300px;
-    width: 75%;
     position: absolute;
-    top: 0px;
-    -webkit-transition-duration: 60s;
+    -webkit-transition-duration: 50s;
     -webkit-transition-timing-function: linear;
-}
-#credits {
+    -webkit-border-radius: 10px;
+    border: 1px solid gray;
     z-index: 1000;
     font-family: Serif;
     font-weight: bolder;
@@ -303,14 +304,19 @@ div.gameobject {
 }
 #credits p#creditsheader {
     font-size: 36pt;
-    margin-top: 3em;
+    margin-top: 2em;
     margin-bottom: 3em;
 }
 #credits p {
     margin-top: 6em;
-    margin-bottom: 6em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
-#credits img { margin-top: 3em; }
+#credits img { 
+    padding-left: 1em;
+    margin-top: 3em;
+    padding-right: 1em;
+}
 #credits img#blue, img#gray, img#orange, img#red, img#whiter, img#white { float: right; }
 #credits img#cyan, img#green, img#purple, img#whitel, img#yellow { float: left; }
 

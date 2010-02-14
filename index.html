@@ -3,109 +3,62 @@
 <head>
     <title>Anigma</title>
     <link rel=stylesheet type="text/css" href="style.css">
+    <meta name="viewport" content="width=320" />
 </head>
 
 <body>
-<div id="completed"></div>
-<div id="score"></div>
+<div id="game">
 
-<div id="backgrounddata">
-    <div id="title">Anigma</div>
+    <div id="score"></div>
     <div id="currentLevel"></div>
-    <div id="css3Logo">CSS3</div>
-    <div id="story">While wondering in the woods Madelina's discovered a cave filled with jewels.  Help Madelina collect all of the jewels in each cavern by touching jewels of the same color together.<p>
-    Use the arrow keys or the mouse to select jewels and move them.<p>Hit 'E' to pull up the level editor and make your own levels.</div>
-</div>
-<div id="board">
-    <div id="launchgame">
-        <input id="play1" type="button" value="Play Game" onclick="launch(false)"><br>
-        <br>
-        <input id="play2" type="button" value="Play Game with Audio" onclick="launch(true)">
+    <div id="extra_bg">
+        <div id="title">Anigma</div>
+        <div id="css3Logo">CSS3</div>
+        <div id="story">While wondering in the woods Madelina's discovered a cave filled with jewels.  Help Madelina collect all of the jewels in each cavern by touching jewels of the same color together.<p>
+        Click on a jewel or press the space bar to select it.  Use the arrow keys or the click to the left/right of the jewel to move it.</div>
     </div>
-    <div id="messagebox"></div>
-</div>
-<div id="clock"></div>
+    <div id="finishedlevelanimation"></div>
 
-
-<div id="restartLevel"><a href="javascript:restartLevel();">Restart Level</a></div>
-<div id="about"><a href="about.html">About / Credits</a></div>
-<div id="copyright">Copyright <a href="mailto:ben@meyerhome.net">Benjamin C. Meyer</a> 2010</div>
-
-<form id="debug">
-    <input id="level" type="text" value="101">
-    <input id="restartlevelbutton" type="button" value="Restart Level" onclick="restartLevel()">
-    <textarea id="levellog" cols=20 rows=2></textarea>
-    <div id="log"></div>
-</form>
-
-<form id="editor">
-    <textarea id="levelEditor" cols=15 rows=12></textarea>
-    <div>
-    <ul id="levelTypes">
-    <li>[reserved]-[reserved]-[reserved]-TIME
-    <li>B,R,Y,G,P,A,H,E - Jewels
-    <li>W - Wall
-    <li>T - Trap door
-    <li>F - Firepit
-    <li>C - Breakable Wall
-    <li>M - Elevator (not implemented)
-    </ul>
-    Created a good level?  <a href="mailto:ben+anigma@meyerhome.net">E-mail</a> it to me and I will add it to the list.
+    <div id="board">
+        <div id="launchgame">
+            <input id="play2" type="button" value="Play Game with Audio" onclick="launch(true)"><br> <br>
+            <input id="play1" type="button" value="Play Game (no audio)" onclick="launch(false)">
+        </div>
+        <div id="messagebox"></div>
     </div>
-    <input type="button" value="Load Level" onclick="loadLevelFile(document.getElementById('levelEditor').value)">
-</form>
+    <div id="clock"></div>
 
 
-<div id="creditsbox">
-<div id="credits">
-<img id="whitel" src="png/jewel_white.png">
-<img id="whiter" src="png/jewel_white.png">
-<p>
-<p id = "creditsheader">
-Anigma
-</p>
-<p>
-<img id="blue" src="png/jewel_blue.png">
-Programmed by <a href="http://benjamin-meyer.blogspot.com">Benjamin Meyer</a>
-<p>
-<img id="cyan" src="png/jewel_cyan.png">
-Thanks to Jennifer Meyer for play testing
-<p>
-<img id="gray" src="png/jewel_gray.png">
-Inspired by the Sharp Zaurus game <a href="http://benjamin-meyer.blogspot.com/2007/03/anigma-game.html">Anigma</a> created by Walter Rawdanik
-<p>
-<img id="green" src="png/jewel_green.png">
-Background by Eugene Trounev
-<p>
-<img id="orange" src="png/jewel_orange.png">
-Jewels by Eugene Trounev and Sebastien Delestaing
-<p>
-<img id="purple" src="png/jewel_purple.png">
-Music:<br>
-First by <a href="http://8bitcollective.com/members/neil/">Neil</a>
-Tiny Tunes by <a href="http://8bitcollective.com/members/FantomenK/">FantomenK</a>
-Reflect 2 by <a href="http://8bitcollective.com/members/Nanoshine/">Nanoshine</a>
-Neon Aurora by <a href="http://8bitcollective.com/members/Alpha+C/">Alpha C</a>
-Wine Walls by <a href="http://8bitcollective.com/members/Siddhis/">Siddhis</a>
-All Systems Go by <a href="http://8bitcollective.com/members/Emar/">Emar</a>
-Aftershock Sunrise by <a href="http://8bitcollective.com/members/sleepy/">Sleepy</a>
-Solo City by <a href="http://8bitcollective.com/members/Pompei/">Pompei</a>
-Without You by <a href="http://8bitcollective.com/members/Pompei/">Pompei</a>
-The Blackbird by <a href="http://8bitcollective.com/members/sailfish/">Sailfish</a>
-Her Lazer Light Eyes by <a href="http://8bitcollective.com/music/Guest/186/">Nullsleep</a>
-<p>
-<img id="red" src="png/jewel_red.png">
-All artwork is under the GPLv2 license
-<p>
-<img id="yellow" src="png/jewel_yellow.png">
-Javascript is under the BSD license
-<p>
-<img id="white" src="png/jewel_white.png">
-Music is under the Creative Commons BY-NC-SA License
-<p>
-Thanks for playing!
-</div>
-</div>
+    <div id="restartLevel"><a href="javascript:restartLevel();">Restart Level</a></div>
+    <div id="about"><a href="about.html">About / Credits</a></div>
+    <div id="copyright">Copyright <a href="mailto:ben@meyerhome.net">Benjamin C. Meyer</a> 2010</div>
 
+    <form id="debug">
+        <input id="level" type="text" value="101">
+        <input id="restartlevelbutton" type="button" value="Restart Level" onclick="restartLevel()">
+        <textarea id="levellog" cols=20 rows=2></textarea>
+        <div id="log"></div>
+    </form>
+
+    <form id="editor">
+        <textarea id="levelEditor" cols=15 rows=12></textarea>
+        <div>
+        <ul id="levelTypes">
+        <li>[reserved]-[reserved]-[reserved]-TIME
+        <li>B,R,Y,G,P,A,H,E - Jewels
+        <li>W - Wall
+        <li>T - Trap door
+        <li>F - Firepit
+        <li>C - Breakable Wall
+        <li>M - Elevator (not implemented)
+        </ul>
+        Created a good level?  <a href="mailto:ben+anigma@meyerhome.net">E-mail</a> it to me and I will add it to the list.
+        </div>
+        <input type="button" value="Load Level" onclick="loadLevelFile(document.getElementById('levelEditor').value)">
+    </form>
+<div id="creditsbox"><div id="credits"></div></div>
 <script src="anigma.js" language="javascript" type="text/javascript"></script>
+<div style="clear:both;"></div>
+</div>
+</body>
 </html>
