@@ -15,11 +15,11 @@ else
   echo "${log}" > logs/$lastlevel/$file;
 fi
 
-level=`determinelevel.cgi $level`
 
 echo "Status: 200";
 echo "Content-type: text/html";
 echo "";
+level=`./determinelevel.cgi $level`
 cat ../levels/${level}.level;
 
 #printenv
