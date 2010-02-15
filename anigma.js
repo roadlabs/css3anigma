@@ -741,7 +741,7 @@ function loadGame()
         var gamebox = document.getElementById('game');
         gamebox.style.marginTop = 0;
     }
- 
+
     if (checkForWebKitBrowser() === false) {
         return;
     }
