@@ -163,7 +163,7 @@ div.gameobject {
     -webkit-animation-iteration-count: 0;
     -webkit-animation-timing-function: linear;
     background-attachment: absolute;
-    background-size: 200 40;
+    -webkit-background-size: 200 40;
 }
 
 #C,#P,#G,#Y,#B,#R,#M,#A,#H,#E {
