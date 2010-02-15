@@ -17,7 +17,8 @@ fi
 
 if [ ! -f ../levels/${level}.level ] ; then
     offset=$(($level % 100));
-    let level=$level-$offset+100;
+    let level=$level-$offset;
+    let level=$level+101;
 fi
 
 echo "Status: 200";
