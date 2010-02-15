@@ -34,7 +34,7 @@ TODO
 
 function logg(string)
 {
-    log.innerHTML = log.innerHTML + ' ' +string + '<br>';
+    //log.innerHTML = log.innerHTML + ' ' +string + '<br>';
 }
 
 function getCookie(cookieName)
@@ -431,8 +431,6 @@ function clickedOnBoard()
         return;
     }
     var abp = getAbsolutePosition(node);
-    logg(abp.x);
-    logg(event.clientX);
     if (event.clientX < abp.x) {
         moveSelection(-size, 0);
         return;
