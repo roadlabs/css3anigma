@@ -1,0 +1,13 @@
+
+remove=$1
+mv ${remove}.level ${remove}.level_
+
+for (( ; ; ))
+do
+    let next=$remove+1
+    if [ ! -f ${next}.level ] ; then
+        exit 0
+    fi
+    mv ${next}.level ${remove}.level
+    remove=$next;
+done
