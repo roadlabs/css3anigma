@@ -247,9 +247,14 @@ function checkGravityOnNode(node)
     }
 
     if (!bNode) {
-        node.style.posTop += size;
-        if (node && node === cursor.selectedElement) {
-            cursor.style.posTop += size;
+        if (node.style.posTop + size > board.style.height.split('px')[0]) {
+            removeJewel(node);
+            return false;
+        } else {
+            node.style.posTop += size;
+            if (node && node === cursor.selectedElement) {
+                cursor.style.posTop += size;
+            }
         }
         return true;
     }
@@ -466,7 +471,7 @@ function moveSelection(x, y)
     var newx = cursor.style.posLeft + x;
     var newy = cursor.style.posTop + y;
     // Can't move off the board
-    if (newx < 0 || newy < 0 || newx > board.style.width || newy > board.style.height) {
+    if (newx < 0 || newy < 0 || newx > board.style.width || newy > board.style.height.split('px')[0]) {
         return;
     }
 
