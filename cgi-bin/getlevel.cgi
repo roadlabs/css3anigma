@@ -15,7 +15,10 @@ else
   echo "${log}" > logs/$lastlevel/$file;
 fi
 
-let level=$level+200;
+if [ ! -f ../levels/${level}.level ] ; then
+    offset=$(($level % 100));
+    let level=$level-$offset+100;
+fi
 
 echo "Status: 200";
 echo "Content-type: text/html";

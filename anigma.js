@@ -145,7 +145,7 @@ function checkLevel()
     document.cookie = 'score=' + escape(score) + ';expires=' + expirationDate.toGMTString();
     document.cookie = 'levelLog=' + escape(levelLog) + ';expires=' + expirationDate.toGMTString();
 
-    if (currentLevel >= 50) {
+    if (currentLevel >= totalLevels) {
         showCredits();
     } else {
         // At the end of this animation loadLevel will be called.
@@ -537,7 +537,7 @@ function loadLevelFile(level)
     dialog.style.opacity = 0;
     dialog.style.top = '-14em';
 
-    levelDisplay.innerHTML = '#' + currentLevel;
+    levelDisplay.innerHTML = '#' + currentLevel + '/<small><small>' + totalLevels + '</small></small>';
     logtimestart = new Date().getTime();
     levelLog = '';
 
@@ -826,6 +826,7 @@ function keyUpEvent()
 
 function loadGame()
 {
+    totalLevels = 571;
     if (document.body.clientWidth < 400) {
         var extra = document.getElementById('extra_bg');
         extra.style.display = 'none';
