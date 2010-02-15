@@ -40,7 +40,7 @@ TODO
 
 function logg(string)
 {
-    // log.innerHTML = log.innerHTML + ' ' +string + '<br>';
+     log.innerHTML = log.innerHTML + ' ' +string + '<br>';
 }
 
 function getCookie(cookieName)
@@ -185,7 +185,7 @@ function toggleSelection()
     if (cursor.selected) {
         cursor.selected = false;
         cursor.selectedElement = NaN;
-        cursor.style.backgroundImage = 'url("png/cursor_unselected.png")';//opacity = 1;
+        cursor.style.backgroundImage = 'url("png/cursor_unselected.png")';
     } else {
         var node = getGameElementAt(cursor.style.posLeft, cursor.style.posTop);
         selectJewel(node);
@@ -221,6 +221,8 @@ function checkGravityOnNode(node)
     var bNode = getGameElementAt(x, y + size);
     if (bNode.id === 'C') {
         bNode.style.webkitAnimationIterationCount = 1;
+        bNode.style.webkitAnimationPlayState = 'running';
+        node.crumbling = bNode;
     }
 
     if (bNode.id === 'T' && bNode.closed !== true) {
@@ -385,6 +387,9 @@ function swap_mover()
 
 function moveOffElevator(jewel, x, y)
 {
+    // not implemented
+    return;
+
     // Check if we were on a
     if (jewel.onTopElevator) {
         jewel.onTopElevator = false;
@@ -416,6 +421,8 @@ function moveOffElevator(jewel, x, y)
 
 function moveOnElevator(jewel, x, y)
 {
+    // not implemented
+    return;
     for (var i = 0; i < board.childNodes.length; ++i) {
         var node = board.childNodes[i];
         if (node.id !== 'M') {
@@ -479,6 +486,10 @@ function moveSelection(x, y)
     cursor.style.posTop = newy;
     if (cursor.selected) {
         var selectedNode = cursor.selectedElement;
+        if (selectedNode.crumbling) {
+            selectedNode.crumbling.style.webkitAnimationPlayState = 'paused';
+            selectedNode.crumbling = NaN;
+        }
         if (!moveOffElevator(selectedNode, x, y)) {
             if (!moveOnElevator(selectedNode, newx, newy)) {
                 selectedNode.style.posLeft += x;
@@ -517,7 +528,6 @@ function clickedOnBoard()
         moveSelection(size, 0);
     }
 }
-
 
 function loadLevelFile(level)
 {
@@ -564,7 +574,7 @@ function loadLevelFile(level)
         return false;
     }
     board.style.height = height;
-    board.style.marginTop = (9 * size) - (height);
+    board.style.marginTop = (10 * size) - (height);
     var width;
     for (var i = 0; i < rows.length -1; ++i) {
         var row = rows[i + 1];
@@ -635,6 +645,7 @@ function loadLevelFile(level)
                 break;
 
             case 'M':
+                // Levels with elevators are currently not supported
                 //currentLevel++;
                 //loadLevel();
                 //return;
@@ -793,16 +804,22 @@ function keyUpEvent()
         break;
 
     case 69: // e
-        document.getElementById('editor').style.display = 'block';
+        var box = document.getElementById('editor');
+        if (box.style.display === 'block') {
+            box.style.display = 'none';
+        } else {
+            box.style.display = 'block';
+        }
         break;
 
     // Show the debug form
     case 75: // k
         var debugbox = document.getElementById('debug');
-        if (debugbox.style.display == 'block')
+        if (debugbox.style.display === 'block') {
             debugbox.style.display = 'none';
-        else
+        } else {
             debugbox.style.display = 'block';
+        }
         break;
     }
 }

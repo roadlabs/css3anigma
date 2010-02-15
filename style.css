@@ -16,7 +16,7 @@ a:active {color:white;}
     padding: 0;
     border: 1px solid gray;
     max-width: 1024px;
-    margin-top: 15%;
+    margin-top: 10%;
     background-image: url('png/background.png');
 }
 
@@ -78,7 +78,7 @@ a:active {color:white;}
 #board {
     position: relative;
     padding-top: 60px;
-    height: 360px;
+    height: 400px;
     margin: 0 auto;
 }
 
