@@ -30,11 +30,17 @@
 TODO
     Loading level animation.
     Order Levels in a fun manner
+
+    1 color
+    2 colors
+    3 stones
+    1 breakable box
+
 */
 
 function logg(string)
 {
-    //log.innerHTML = log.innerHTML + ' ' +string + '<br>';
+    // log.innerHTML = log.innerHTML + ' ' +string + '<br>';
 }
 
 function getCookie(cookieName)
@@ -216,12 +222,6 @@ function checkGravityOnNode(node)
     if (bNode.id === 'C') {
         bNode.style.webkitAnimationIterationCount = 1;
     }
-    if (bNode.id === 'M') {
-        node.parentNode.removeChild(node);
-        bNode.appendChild(node);
-        node.style.posLeft = 0;
-        node.style.posTop = -size;
-    }
 
     if (bNode.id === 'T' && bNode.closed !== true) {
         bNode.closed = true;
@@ -235,6 +235,12 @@ function checkGravityOnNode(node)
         removeJewel(node);
         bNode.id = 'W';
         bNode.style.webkitBackgroundSize = size + 'px ' + size + 'px';
+        bNode = NaN;
+    }
+
+    if (bNode.id === 'M') {
+        if (moveOnElevator(node, node.style.posLeft, node.style.posTop))
+            return;
         bNode = NaN;
     }
 
@@ -305,16 +311,17 @@ function getGameElementAt(x, y)
             continue;
         }
         if(node.id === 'cursor') {
-          continue;
+            continue;
         }
 
-        var ny = node.style.posTop;
-        var nx = node.style.posLeft;
-        if (nx === x && ny === y) {
-            return node;
-        }
-        if (node.id === 'M' && x === nx) {
-            if (y - ny < size && y - ny > -size) {
+        // Elevators have special properties
+        if (node.id === 'M' && x === node.style.posLeft) {
+            var my = window.getComputedStyle(node, null).posTop;
+            if (y + size + size > my && y < my) {
+                return node;
+            }
+        } else {
+            if (node.style.posLeft === x && node.style.posTop === y) {
                 return node;
             }
         }
@@ -376,6 +383,72 @@ function swap_mover()
     this.direction = !this.direction;
 }
 
+function moveOffElevator(jewel, x, y)
+{
+    // Check if we were on a
+    if (jewel.onTopElevator) {
+        jewel.onTopElevator = false;
+
+        var mover = jewel.parentNode;
+        var jewelY = window.getComputedStyle(jewel, null).posTop + mover.style.posTop;
+        jewel.parentNode.removeChild(jewel);
+        jewel.style.posTop = (jewelY - (jewelY % size));
+        board.appendChild(jewel);
+        mover.endAnimationY -= size;
+        mover.style.posTop = mover.endAnimationY;
+
+        jewel.style.posLeft += x;
+        checkElement(jewel);
+        return true;
+    }
+    if (jewel.underElevator) {
+        jewel.underElevator = false;
+
+        jewel.underElevator.startAnimationY += size;
+        jewel.underElevator.style.posTop = jewel.underElevator.startAnimationY;
+
+        jewel.style.posLeft += x;
+        checkElement(jewel);
+        return true;
+    }
+    return false;
+}
+
+function moveOnElevator(jewel, x, y)
+{
+    for (var i = 0; i < board.childNodes.length; ++i) {
+        var node = board.childNodes[i];
+        if (node.id !== 'M') {
+            continue;
+        }
+
+        if (node.style.posLeft != x) {
+            continue;
+        }
+        if (y <= node.startAnimationY && y >=  node.endAnimationY) {
+            var moverY = window.getComputedStyle(node, null).posTop;
+            if (moverY > y) {
+                // box is above
+                jewel.parentNode.removeChild(jewel);
+                node.appendChild(jewel);
+                jewel.style.posLeft = 0;
+                jewel.style.posTop = -size;
+                node.endAnimationY += size;
+                jewel.onTopElevator = true;
+                checkElement(jewel);
+                return true;
+            } else {
+                // box is below
+                node.startAnimationY -= size;
+                jewel.underElevator = node;
+                checkElement(jewel);
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 function moveSelection(x, y)
 {
     if (document.getElementById('messagebox').style.opacity != '0') {
@@ -383,30 +456,35 @@ function moveSelection(x, y)
     }
 
     var allow = true;
-    var newx =  cursor.style.posLeft + x;
-    var newy =  cursor.style.posTop + y;
+    var newx = cursor.style.posLeft + x;
+    var newy = cursor.style.posTop + y;
+    // Can't move off the board
     if (newx < 0 || newy < 0 || newx > board.style.width || newy > board.style.height) {
         return;
     }
 
     if (cursor.selected) {
-        var node = getGameElementAt(newx, newy);
-        if (node || y < 0) {
-            allow = false;
+        // Can't move up, only down
+        if (y < 0) {
+            return;
         }
-    }
 
-    if (!allow) {
-        return;
+        var node = getGameElementAt(newx, newy);
+        if (node) {
+            return;
+        }
     }
 
     cursor.style.posLeft = newx;
     cursor.style.posTop = newy;
     if (cursor.selected) {
         var selectedNode = cursor.selectedElement;
-        selectedNode.style.posLeft += x;
-        selectedNode.style.posTop += y;
-
+        if (!moveOffElevator(selectedNode, x, y)) {
+            if (!moveOnElevator(selectedNode, newx, newy)) {
+                selectedNode.style.posLeft += x;
+                selectedNode.style.posTop += y;
+            }
+        }
         logPlayerActions(selectedNode);
     }
 }
@@ -557,10 +635,9 @@ function loadLevelFile(level)
                 break;
 
             case 'M':
-                currentLevel++;
-                loadLevel();
-                return;
-                /*
+                //currentLevel++;
+                //loadLevel();
+                //return;
                 item.startAnimationY = i;
                 item.endAnimationY = parseInt(row[j+3] + row[j+4], 10);
                 var diff = item.startAnimationY - item.endAnimationY;
@@ -574,7 +651,6 @@ function loadLevelFile(level)
                 item.style.posTop = item.startAnimationY;
                 item.addEventListener('webkitTransitionEnd', swap_mover, false);
                 item.direction = true;
-                */
                 break;
 
             default:
