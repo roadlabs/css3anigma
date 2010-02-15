@@ -15,11 +15,7 @@ else
   echo "${log}" > logs/$lastlevel/$file;
 fi
 
-if [ ! -f ../levels/${level}.level ] ; then
-    offset=$(($level % 100));
-    let level=$level-$offset;
-    let level=$level+101;
-fi
+level=`determinelevel.cgi $level`
 
 echo "Status: 200";
 echo "Content-type: text/html";
