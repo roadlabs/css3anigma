@@ -826,7 +826,7 @@ function keyUpEvent()
 
 function loadGame()
 {
-    totalLevels = 571;
+    totalLevels = 573;
     if (document.body.clientWidth < 400) {
         var extra = document.getElementById('extra_bg');
         extra.style.display = 'none';
