@@ -568,8 +568,12 @@ function loadLevelFile(level)
     var rows = level.split('\n');
     var height = size * (rows.length - 2);
     if (height <= 0) {
-        currentLevel = 1;
-        loadLevel();
+        if (currentLevel != 1) {
+            currentLevel = 1;
+            loadLevel();
+        } else {
+            showMessageBox('Error Loading Level: ' + currentLevel + ', sorry.');
+        }
         return;
     }
 
