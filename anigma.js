@@ -221,6 +221,7 @@ function checkGravityOnNode(node)
     var bNode = getGameElementAt(x, y + size);
     if (bNode.id === 'C') {
         bNode.style.webkitAnimationIterationCount = 1;
+        selectedNode.crumbling.style.webkitAnimationName = 'crumbleAnimation';
         bNode.style.webkitAnimationPlayState = 'running';
         node.crumbling = bNode;
     }
@@ -492,7 +493,10 @@ function moveSelection(x, y)
     if (cursor.selected) {
         var selectedNode = cursor.selectedElement;
         if (selectedNode.crumbling) {
-            selectedNode.crumbling.style.webkitAnimationPlayState = 'paused';
+            var cblock = selectedNode.crumbling;
+            var offset = window.getComputedStyle(cblock, null).backgroundPosition;
+            selectedNode.crumbling.style.webkitAnimationName = 'none';
+            cblock.style.backgroundPosition = offset;
             selectedNode.crumbling = NaN;
         }
         if (!moveOffElevator(selectedNode, x, y)) {
