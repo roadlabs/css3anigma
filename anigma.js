@@ -26,6 +26,10 @@
  * SUCH DAMAGE.
  */
 
+/**
+
+*/
+
 function logg(string)
 {
      log.innerHTML = log.innerHTML + ' ' +string + '<br>';
@@ -329,6 +333,11 @@ function getGameElementAt(x, y)
 
 function checkElement(node)
 {
+    if (checkGravityOnNode(node)) {
+        checkGravity();
+        return;
+    }
+
     var x = node.style.posLeft;
     var y = node.style.posTop;
     var removed = false;
@@ -356,7 +365,7 @@ function checkElement(node)
         removed = true;
     }
 
-   if (removed) {
+    if (removed) {
         removeJewel(node);
     } else {
         checkGravity();
@@ -888,7 +897,7 @@ function launch(haveAudio) {
       playBackgroundAudio();
       audio.volume = 0.2;
   }
-  document.getElementById('launchgame').style.display = 'none';
+  document.getElementById('launchgame').style.opacity = '0'; // setting display = 'none'; causes a flicker
   loadLevel();
 }
 
