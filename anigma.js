@@ -45,7 +45,10 @@
     - A better 'you finished the level animation'
     - Don't do anything and it will show a level being solved i.e. demo mode
     - High score leaderboard or something.
-
+    - Use JSON for the level format.
+    - Import the rest of the vexed levels
+    - I give up button that automatically solves it.
+    - A freeze state button so you can restart not from the start.
 */
 
 function logg(string)
