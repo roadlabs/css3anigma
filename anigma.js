@@ -26,31 +26,6 @@
  * SUCH DAMAGE.
  */
 
-/**
-    See about.html for details on how this work.
-
-    A few parts are still in the code base, the biggest being the 'M' objects
-    which are elevators that jewels can sit on top of.  I simply ran out
-    of the amount of time I was willing to put in the demo.
-
-    Other neat things that could be added to the board
-    - Teleporters
-    - Ice blocks
-    - Trap doors that would come down after you go under them.
-    - Buttons that must have a block in it to open a door
-    - Dumb waiter type elevator with two platforms and whichever is 'heavier' will go down and the other up.
-    - loose ceiling piece that falls and can crush a jewel
-
-    Stuff that I didn't get around to finishing
-    - A better 'you finished the level animation'
-    - Don't do anything and it will show a level being solved i.e. demo mode
-    - High score leaderboard or something.
-    - Use JSON for the level format.
-    - Import the rest of the vexed levels
-    - I give up button that automatically solves it.
-    - A freeze state button so you can restart not from the start.
-*/
-
 function logg(string)
 {
      log.innerHTML = log.innerHTML + ' ' +string + '<br>';
