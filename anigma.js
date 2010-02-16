@@ -692,6 +692,7 @@ function loadLevelFile(level)
     clock.style.backgroundColor = 'white';
     setTimeout(startLevelAnimations, 100);
     levelCompleted = false;
+    toggleSelection();
 }
 
 function loadLevel()
