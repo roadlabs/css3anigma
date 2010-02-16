@@ -26,18 +26,6 @@
  * SUCH DAMAGE.
  */
 
-/*
-TODO
-    Loading level animation.
-    Order Levels in a fun manner
-
-    1 color
-    2 colors
-    3 stones
-    1 breakable box
-
-*/
-
 function logg(string)
 {
      log.innerHTML = log.innerHTML + ' ' +string + '<br>';
@@ -220,8 +208,10 @@ function checkGravityOnNode(node)
     var y = node.style.posTop;
     var bNode = getGameElementAt(x, y + size);
     if (bNode.id === 'C') {
+        // sadly the currently release safari doesn't support pausing
+        // and I can't figure out a way to pause.
         bNode.style.webkitAnimationIterationCount = 1;
-        selectedNode.crumbling.style.webkitAnimationName = 'crumbleAnimation';
+        bNode.style.webkitAnimationName = 'crumbleAnimation';
         bNode.style.webkitAnimationPlayState = 'running';
         node.crumbling = bNode;
     }
@@ -497,6 +487,7 @@ function moveSelection(x, y)
             var offset = window.getComputedStyle(cblock, null).backgroundPosition;
             selectedNode.crumbling.style.webkitAnimationName = 'none';
             cblock.style.backgroundPosition = offset;
+            cblock.style.webkitAnimationPlayState = 'paused';
             selectedNode.crumbling = NaN;
         }
         if (!moveOffElevator(selectedNode, x, y)) {
