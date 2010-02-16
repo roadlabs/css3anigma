@@ -905,18 +905,18 @@ function loadGame()
 }
 
 function launch(haveAudio) {
-  if (haveAudio) {
-      var audio = document.createElement('audio');
-      audio.addEventListener('ended', function () { playBackgroundAudio(); } );
-      audio.id = 'audio';
-      document.body.appendChild(audio);
-      audio.setAttribute('controls', 'true');
-      audio.currentSong = 0;
-      playBackgroundAudio();
-      audio.volume = 0.2;
-  }
-  document.getElementById('launchgame').style.opacity = '0'; // setting display = 'none'; causes a flicker
-  loadLevel();
+    if (haveAudio) {
+        var audio = document.createElement('audio');
+        audio.addEventListener('ended', function () { playBackgroundAudio(); } );
+        audio.id = 'audio';
+        document.body.appendChild(audio);
+        audio.setAttribute('controls', 'true');
+        audio.currentSong = 0;
+        playBackgroundAudio();
+        audio.volume = 0.2;
+    }
+    document.getElementById('launchgame').style.display = 'none';
+    loadLevel();
 }
 
 loadGame();
