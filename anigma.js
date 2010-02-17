@@ -84,11 +84,12 @@ function checkForWebKitBrowser()
 {
     var regexp = /WebKit\/([\d.]+)/;
     if (!regexp.exec(navigator.userAgent)) {
+        /*var regexp = /Minefield/;
+        if (regexp.exec(navigator.userAgent)) {
+            return true;
+        }*/
         showMessageBox('Sorry, Anigma requires a WebKit browser such as <a href="http://www.apple.com/safari/">Safari</a>, <a href="http://www.google.com/chrome">Chrome</a>, or <a href="http://arora-browser.org">Arora</a><small>  (Firefox nightly might work)</small>');
-        return false;
     }
-
-    return true;
 }
 
 function changeScore(amount)
@@ -875,9 +876,7 @@ function loadGame()
         gamebox.style.marginTop = 0;
     }
 
-    if (checkForWebKitBrowser() === false) {
-        return;
-    }
+    checkForWebKitBrowser();
 
     score = 0;
     size = 40;
