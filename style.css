@@ -223,7 +223,7 @@ div.gameobject {
     -webkit-transition-property: width background-color;
     -webkit-transition-timing-function: linear;
     -webkit-transition-duration: 0s;
-    -moz-transition-property: width background-color;
+    -moz-transition-property: width, background-color;
     -moz-transition-timing-function: linear;
     -moz-transition-duration: 0s;
 }
