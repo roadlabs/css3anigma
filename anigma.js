@@ -94,8 +94,11 @@ function checkForWebKitBrowser()
 function changeScore(amount)
 {
     score += amount;
-    scoreDisplay.style.width = score;
-    if (score < 0) {
+    if (score <= 1024)
+        scoreDisplay.style.width = score;
+    else
+        scoreDisplay.style.width = 1024;
+    if (score < 0 && amount < 0) {
         showMessageBox('Game Over!');
     }
 }
@@ -147,7 +150,7 @@ function outOfTime()
         return;
     }
     showMessageBox('Out of Time!');
-    changeScore(-3);
+    changeScore(-10);
 }
 
 function selectJewel(node)
@@ -187,7 +190,7 @@ function removeJewel(node)
     }
 
     var f = function (event) {
-        changeScore(2);
+        changeScore(1);
         if (node && node === cursor.selectedElement) {
             toggleSelection();
         }
@@ -542,7 +545,7 @@ function loadLevelFile(level)
     dialog.style.opacity = 0;
     dialog.style.top = '-14em';
 
-    levelDisplay.innerHTML = '#' + currentLevel + '/<small><small>' + totalLevels + '</small></small>';
+    levelDisplay.innerHTML = '#' + currentLevel;///<small><small>' + totalLevels + '</small></small>';
     logtimestart = new Date().getTime();
     levelLog = '';
 
@@ -563,6 +566,7 @@ function loadLevelFile(level)
     board.appendChild(cursor);
     cursor.selected = true;
     cursor.style.webkitBackgroundSize = size + 'px ' + size + 'px';
+    cursor.style.mozBackgroundSize = size + 'px ' + size + 'px';
     toggleSelection();
 
     var rows = level.split('\n');
@@ -597,14 +601,10 @@ function loadLevelFile(level)
             item.className = 'gameobject';
             item.id = row[j];
 
-            item.style.posTop = i * size;
-            item.style.posLeft = j * size;
-            item.style.width = size;
-            item.style.height = size;
-
             switch(row[j]) {
             case 'C':
                 item.addEventListener('webkitAnimationEnd', itemAnimationEnd, false);
+                item.addEventListener('mozAnimationEnd', itemAnimationEnd, false);
                 break;
 
             case 'F':
@@ -644,7 +644,7 @@ function loadLevelFile(level)
                 item.addEventListener('webkitTransitionEnd', movementTransitionDone, false);
                 item.onclick = function() { selectJewel(this); };
                 item.style.webkitBackgroundSize = size + 'px ' + size + 'px';
-                selectJewel(item);
+                item.style.backgroundSize = size + 'px ' + size + 'px';
                 break;
 
             case 'T':
@@ -679,6 +679,12 @@ function loadLevelFile(level)
             }
 
             board.appendChild(item);
+
+            item.style.top = i * size;
+            item.style.left = j * size;
+            item.style.width = size;
+            item.style.height = size;
+
         }
     }
 
