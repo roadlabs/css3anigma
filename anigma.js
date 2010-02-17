@@ -84,7 +84,7 @@ function checkForWebKitBrowser()
 {
     var regexp = /WebKit\/([\d.]+)/;
     if (!regexp.exec(navigator.userAgent)) {
-        showMessageBox('Sorry, Anigma requires a WebKit browser such as <a href="http://www.apple.com/safari/">Safari</a>, <a href="http://www.google.com/chrome">Chrome</a>, or <a href="http://arora-browser.org">Arora</a>');
+        showMessageBox('Sorry, Anigma requires a WebKit browser such as <a href="http://www.apple.com/safari/">Safari</a>, <a href="http://www.google.com/chrome">Chrome</a>, or <a href="http://arora-browser.org">Arora</a><small>  (Firefox nightly might work)</small>');
         return false;
     }
 
@@ -166,8 +166,8 @@ function selectJewel(node)
     cursor.selectedElement = node;
     cursor.selected = true;
     cursor.style.backgroundImage = 'url("png/cursor_selected.png")';
-    cursor.style.posLeft = node.style.posLeft;
-    cursor.style.posTop = node.style.posTop;
+    cursor.style.left = node.style.left;
+    cursor.style.top = node.style.top;
     logPlayerActions(node);
 }
 
@@ -178,7 +178,7 @@ function toggleSelection()
         cursor.selectedElement = NaN;
         cursor.style.backgroundImage = 'url("png/cursor_unselected.png")';
     } else {
-        var node = getGameElementAt(cursor.style.posLeft, cursor.style.posTop);
+        var node = getGameElementAt(nodeLeft(cursor), nodeTop(cursor));
         selectJewel(node);
     }
 }
@@ -207,8 +207,8 @@ function removeJewel(node)
 
 function checkGravityOnNode(node)
 {
-    var x = node.style.posLeft;
-    var y = node.style.posTop;
+    var x = nodeLeft(node);
+    var y = nodeTop(node);
     var bNode = getGameElementAt(x, y + size);
     if (bNode.id === 'C') {
         // sadly the currently release safari doesn't support pausing
@@ -231,23 +231,25 @@ function checkGravityOnNode(node)
         removeJewel(node);
         bNode.id = 'W';
         bNode.style.webkitBackgroundSize = size + 'px ' + size + 'px';
+        bNode.style.mozBackgroundSize = size + 'px ' + size + 'px';
         bNode = NaN;
     }
 
     if (bNode.id === 'M') {
-        if (moveOnElevator(node, node.style.posLeft, node.style.posTop))
+        if (moveOnElevator(node, nodeLeft(node), nodeTop(node))) {
             return;
+        }
         bNode = NaN;
     }
 
     if (!bNode) {
-        if (node.style.posTop + size > board.style.height.split('px')[0]) {
+        if (nodeTop(node) + size > parseInt(board.style.height.split('px')[0], 10)) {
             removeJewel(node);
             return false;
         } else {
-            node.style.posTop += size;
+            node.style.top = nodeTop(node) + size;
             if (node && node === cursor.selectedElement) {
-                cursor.style.posTop += size;
+                cursor.style.top = nodeTop(cursor) + size;
             }
         }
         return true;
@@ -281,13 +283,16 @@ function startLevelAnimations()
         if (node.id !== 'M') {
             continue;
         }
-        node.style.posTop = node.endAnimationY;
+        node.style.top = node.endAnimationY;
     }
     clock.style.width = '0px';
     clock.style.backgroundColor = 'red';
     clock.style.webkitTransitionDuration = clock.time + 's';
     clock.style.webkitTransitionProperty = 'width background-color';
     clock.addEventListener('webkitTransitionEnd', outOfTime, false);
+    clock.style.mozTransitionDuration = clock.time + 's';
+    clock.style.mozTransitionProperty = 'width background-color';
+    clock.addEventListener('mozTransitionEnd', outOfTime, false);
     checkGravity();
 }
 
@@ -299,9 +304,19 @@ function itemAnimationEnd()
 
 function logPlayerActions(node)
 {
-    levelLog += node.style.posLeft + ' ' + node.style.posTop + ' ';
+    levelLog += nodeLeft(node) + ' ' + nodeTop(node) + ' ';
     levelLog += (new Date().getTime()) - logtimestart + '\n';
     levelLogDisplay.value = levelLog;
+}
+
+function nodeTop(node)
+{
+    return parseInt((node.style.top.split('px')[0]), 10);
+}
+
+function nodeLeft(node)
+{
+    return parseInt((node.style.left.split('px')[0]), 10);
 }
 
 function getGameElementAt(x, y)
@@ -317,12 +332,12 @@ function getGameElementAt(x, y)
 
         // Elevators have special properties
         if (node.id === 'M' && x === node.style.posLeft) {
-            var my = window.getComputedStyle(node, null).posTop;
+            var my = parseInt(window.getComputedStyle(node, null).posTop.split('px')[0], 10);
             if (y + size + size > my && y < my) {
                 return node;
             }
         } else {
-            if (node.style.posLeft === x && node.style.posTop === y) {
+            if (nodeLeft(node) === x && nodeTop(node) === y) {
                 return node;
             }
         }
@@ -337,8 +352,8 @@ function checkElement(node)
         return;
     }
 
-    var x = node.style.posLeft;
-    var y = node.style.posTop;
+    var x = nodeLeft(node);
+    var y = nodeTop(node);
     var removed = false;
 
     var bNode = getGameElementAt(x, y + size);
@@ -371,6 +386,11 @@ function checkElement(node)
     }
 }
 
+function clickedOnJewel()
+{
+    selectJewel(this);
+}
+
 function movementTransitionDone()
 {
     checkElement(this);
@@ -382,9 +402,9 @@ function swap_mover()
         return;
     }
     if (this.direction) {
-        this.style.posTop = this.startAnimationY;
+        this.style.top = this.startAnimationY;
     } else {
-        this.style.posTop = this.endAnimationY;
+        this.style.top = this.endAnimationY;
     }
     this.direction = !this.direction;
 }
@@ -392,19 +412,19 @@ function swap_mover()
 function moveOffElevator(jewel, x, y)
 {
     // not implemented
-    return;
+    return false;
 
     // Check if we were on a
     if (jewel.onTopElevator) {
         jewel.onTopElevator = false;
 
         var mover = jewel.parentNode;
-        var jewelY = window.getComputedStyle(jewel, null).posTop + mover.style.posTop;
+        var jewelY = parseInt(window.getComputedStyle(jewel, null).top.split('px')[0], 10) + nodeTop(mover);
         jewel.parentNode.removeChild(jewel);
-        jewel.style.posTop = (jewelY - (jewelY % size));
+        jewel.style.top = (jewelY - (jewelY % size));
         board.appendChild(jewel);
         mover.endAnimationY -= size;
-        mover.style.posTop = mover.endAnimationY;
+        mover.style.top = mover.endAnimationY;
 
         jewel.style.posLeft += x;
         checkElement(jewel);
@@ -414,7 +434,7 @@ function moveOffElevator(jewel, x, y)
         jewel.underElevator = false;
 
         jewel.underElevator.startAnimationY += size;
-        jewel.underElevator.style.posTop = jewel.underElevator.startAnimationY;
+        jewel.underElevator.style.top = jewel.underElevator.startAnimationY;
 
         jewel.style.posLeft += x;
         checkElement(jewel);
@@ -426,7 +446,7 @@ function moveOffElevator(jewel, x, y)
 function moveOnElevator(jewel, x, y)
 {
     // not implemented
-    return;
+    return false;
     for (var i = 0; i < board.childNodes.length; ++i) {
         var node = board.childNodes[i];
         if (node.id !== 'M') {
@@ -437,13 +457,13 @@ function moveOnElevator(jewel, x, y)
             continue;
         }
         if (y <= node.startAnimationY && y >=  node.endAnimationY) {
-            var moverY = window.getComputedStyle(node, null).posTop;
+            var moverY = parseInt(window.getComputedStyle(node, null).top.split('px')[0], 10);
             if (moverY > y) {
                 // box is above
                 jewel.parentNode.removeChild(jewel);
                 node.appendChild(jewel);
-                jewel.style.posLeft = 0;
-                jewel.style.posTop = -size;
+                jewel.style.lft = 0;
+                jewel.style.top = -size;
                 node.endAnimationY += size;
                 jewel.onTopElevator = true;
                 checkElement(jewel);
@@ -467,8 +487,8 @@ function moveSelection(x, y)
     }
 
     var allow = true;
-    var newx = cursor.style.posLeft + x;
-    var newy = cursor.style.posTop + y;
+    var newx = nodeLeft(cursor) + x;
+    var newy = nodeTop(cursor) + y;
     // Can't move off the board
     if (newx < 0 || newy < 0 || newx > board.style.width || newy > board.style.height.split('px')[0]) {
         return;
@@ -486,8 +506,8 @@ function moveSelection(x, y)
         }
     }
 
-    cursor.style.posLeft = newx;
-    cursor.style.posTop = newy;
+    cursor.style.left = newx;
+    cursor.style.top = newy;
     if (cursor.selected) {
         var selectedNode = cursor.selectedElement;
         if (selectedNode.crumbling) {
@@ -500,8 +520,8 @@ function moveSelection(x, y)
         }
         if (!moveOffElevator(selectedNode, x, y)) {
             if (!moveOnElevator(selectedNode, newx, newy)) {
-                selectedNode.style.posLeft += x;
-                selectedNode.style.posTop += y;
+                selectedNode.style.left = nodeLeft(selectedNode) + x;
+                selectedNode.style.top = nodeTop(selectedNode) + y;
             }
         }
         logPlayerActions(selectedNode);
@@ -518,7 +538,7 @@ function getAbsolutePosition(element) {
     return r;
   };
 
-function clickedOnBoard()
+function clickedOnBoard(event)
 {
     if (!cursor) {
         return;
@@ -567,6 +587,8 @@ function loadLevelFile(level)
     cursor.selected = true;
     cursor.style.webkitBackgroundSize = size + 'px ' + size + 'px';
     cursor.style.mozBackgroundSize = size + 'px ' + size + 'px';
+    cursor.style.top = 0;
+    cursor.style.left = 0;
     toggleSelection();
 
     var rows = level.split('\n');
@@ -609,6 +631,7 @@ function loadLevelFile(level)
 
             case 'F':
                 item.style.webkitBackgroundSize = 10 * size + 'px ' + size + 'px';
+                item.style.mozBackgroundSize = 10 * size + 'px ' + size + 'px';
                 break;
 
             case 'W':
@@ -642,8 +665,10 @@ function loadLevelFile(level)
                     item.style.backgroundImage = 'url("png/jewel_gray.png")'; break;
                 }
                 item.addEventListener('webkitTransitionEnd', movementTransitionDone, false);
-                item.onclick = function() { selectJewel(this); };
+                item.addEventListener('mozTransitionEnd', movementTransitionDone, false);
+                item.addEventListener('click', clickedOnJewel, false);
                 item.style.webkitBackgroundSize = size + 'px ' + size + 'px';
+                item.style.mozBackgroundSize = size + 'px ' + size + 'px';
                 item.style.backgroundSize = size + 'px ' + size + 'px';
                 break;
 
@@ -651,6 +676,7 @@ function loadLevelFile(level)
                 item.style.webkitBackgroundSize = size + 'px ' + size + 'px';
                 item.closed = false;
                 item.addEventListener('webkitTransitionEnd', function() { this.id = 'W'; }, false);
+                item.addEventListener('mozTransitionEnd', function() { this.id = 'W'; }, false);
                 break;
 
             case 'M':
@@ -668,7 +694,7 @@ function loadLevelFile(level)
                 var first = row.substring(0, j);
                 var second = row.substring(j + 4);
                 row = first + second;
-                item.style.posTop = item.startAnimationY;
+                item.style.top = item.startAnimationY;
                 item.addEventListener('webkitTransitionEnd', swap_mover, false);
                 item.direction = true;
                 break;
@@ -694,6 +720,7 @@ function loadLevelFile(level)
         clock.time = 30;
     }
     clock.style.webkitTransitionDuration = '0s';
+    clock.style.mozTransitionDuration = '0s';
     clock.style.width = '100%';
     clock.style.backgroundColor = 'white';
     setTimeout(startLevelAnimations, 100);
@@ -775,15 +802,17 @@ function endLevelAnimation()
     case 7: completedAnimation.style.backgroundImage = 'url("png/jewel_gray.png")'; break;
     }
 
-    completedAnimation.style.posTop = Math.floor(Math.random() * document.body.clientHeight);
+    completedAnimation.style.top = Math.floor(Math.random() * document.body.clientHeight);
     if (completedAnimation.direction === 0) {
         completedAnimation.direction = 1;
-        completedAnimation.style.posLeft = document.body.clientWidth;
+        completedAnimation.style.left = document.body.clientWidth;
         completedAnimation.style.webkitTransform = 'rotate(360deg)';
+        completedAnimation.style.mozTransform = 'rotate(360deg)';
     } else {
         completedAnimation.direction = 0;
-        completedAnimation.style.posLeft = -50;
+        completedAnimation.style.left = -50;
         completedAnimation.style.webkitTransform = 'rotate(-360deg)';
+        completedAnimation.style.mozTransform = 'rotate(-360deg)';
     }
 }
 
@@ -858,7 +887,7 @@ function loadGame()
     levelLogDisplay = document.getElementById('levellog');
     levelDisplay = document.getElementById('currentLevel');
     board = document.getElementById('board');
-    board.onclick = function() { clickedOnBoard(); };
+    board.addEventListener('click', clickedOnBoard, false);
     clock = document.getElementById('clock');
     cursor = document.getElementById('cursor');
     document.getElementById('debug').style.display = 'none';
