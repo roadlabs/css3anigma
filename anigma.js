@@ -815,11 +815,7 @@ function keyUpEvent()
 
     case 69: // e
         var box = document.getElementById('editor');
-        if (box.style.display === 'block') {
-            box.style.display = 'none';
-        } else {
-            box.style.display = 'block';
-        }
+        box.style.display = 'block';
         break;
 
     // Show the debug form
