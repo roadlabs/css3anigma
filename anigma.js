@@ -817,7 +817,7 @@ function endLevelAnimation()
     }
 }
 
-function keyUpEvent()
+function keyUpEvent(event)
 {
     switch(event.keyCode)
     {
