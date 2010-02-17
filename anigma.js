@@ -80,6 +80,17 @@ function showMessageBox(message)
     messageBox.style.opacity = 0.8;
 }
 
+function checkForTransitionSupport()
+{
+    var cssTransitionsSupported = false;
+    var div = document.createElement('div');
+    div.innerHTML = '<div style="-webkit-transition:color 1s linear;-moz-transition:color 1s linear;"></div>';
+    cssTransitionsSupported = (div.firstChild.style.webkitTransition !== undefined) || (div.firstChild.style.mozTransition !== undefined);
+    delete div;
+    return cssTransitionsSupported;
+}
+
+
 function checkForWebKitBrowser()
 {
     var regexp = /WebKit\/([\d.]+)/;
@@ -288,10 +299,10 @@ function startLevelAnimations()
     clock.style.width = '0px';
     clock.style.backgroundColor = 'red';
     clock.style.webkitTransitionDuration = clock.time + 's';
-    clock.style.webkitTransitionProperty = 'width background-color';
+    clock.style.webkitTransitionProperty = 'width, background-color';
     clock.addEventListener('webkitTransitionEnd', outOfTime, false);
     clock.style.mozTransitionDuration = clock.time + 's';
-    clock.style.mozTransitionProperty = 'width background-color';
+    clock.style.mozTransitionProperty = 'width, background-color';
     clock.addEventListener('mozTransitionEnd', outOfTime, false);
     checkGravity();
 }
