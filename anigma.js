@@ -163,7 +163,6 @@ function selectJewel(node)
     if (!node || node.id === 'W') {
         return;
     }
-    event.cancelBubble = true;
     cursor.selectedElement = node;
     cursor.selected = true;
     cursor.style.backgroundImage = 'url("png/cursor_selected.png")';
@@ -387,9 +386,10 @@ function checkElement(node)
     }
 }
 
-function clickedOnJewel()
+function clickedOnJewel(event)
 {
     selectJewel(this);
+    event.cancelBubble = true;
 }
 
 function movementTransitionDone()
