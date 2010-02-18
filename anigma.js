@@ -188,28 +188,30 @@ function toggleSelection()
     }
 }
 
+function animateRemovalDone(event)
+{
+    changeScore(1);
+    if (this === cursor.selectedElement) {
+        toggleSelection();
+    }
+    this.parentNode.removeChild(this);
+    setTimeout(checkLevel, 1000);
+    checkGravity();
+    checkLevel();
+}
+
 function removeJewel(node)
 {
     if (node && node === cursor.selectedElement) {
         toggleSelection();
     }
 
-    var f = function (event) {
-        changeScore(1);
-        if (node && node === cursor.selectedElement) {
-            toggleSelection();
-        }
-        node.parentNode.removeChild(node);
-        setTimeout(checkLevel, 1000);
-        checkGravity();
-        checkLevel();
-    };
     node.removeEventListener('webkitTransitionEnd', movementTransitionDone, false);
-    node.removeEventListener('transitionend', f, false);
-    node.removeEventListener('oTransitionEnd', f, false);
-    node.addEventListener('webkitTransitionEnd', f, false);
-    node.addEventListener('transitionend', f, false);
-    node.addEventListener('oTransitionEnd', f, false);
+    node.removeEventListener('transitionend', movementTransitionDone, false);
+    node.removeEventListener('oTransitionEnd', movementTransitionDone, false);
+    node.addEventListener('webkitTransitionEnd', animateRemovalDone, false);
+    node.addEventListener('transitionend', animateRemovalDone, false);
+    node.addEventListener('oTransitionEnd', animateRemovalDone, false);
     node.style.opacity = 0;
 }
 
