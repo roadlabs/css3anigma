@@ -926,7 +926,7 @@ function loadGame()
 function launch(haveAudio) {
     if (haveAudio) {
         var audio = document.createElement('audio');
-        audio.addEventListener('ended', function () { playBackgroundAudio(); } );
+        audio.addEventListener('ended', function () { playBackgroundAudio(); }, false );
         audio.id = 'audio';
         document.body.appendChild(audio);
         audio.setAttribute('controls', 'true');
