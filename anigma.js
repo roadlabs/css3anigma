@@ -110,9 +110,9 @@ function changeScore(amount)
         scoreDisplay.style.width = score;
     else
         scoreDisplay.style.width = 1024;
-    if (score < 0 && amount < 0) {
+    /*if (score < 0 && amount < 0) {
         showMessageBox('Game Over!');
-    }
+    }*/
 }
 
 function checkLevel()
