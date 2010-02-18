@@ -50,6 +50,7 @@ a:active {color:white;}
     font-size: 90px;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
 }
 
 #story
@@ -99,12 +100,18 @@ div.gameobject {
     background-image: url('png/trap_left.png'), url('png/trap_right.png');
     background-repeat: no-repeat;
     background-position: -5px 0px, 5px 0px;
+
     -webkit-transition-property: background-position;
     -webkit-transition-duration: 1s;
     -webkit-transition-timing-function: linear;
+
     -moz-transition-property: background-position;
     -moz-transition-duration: 1s;
     -moz-transition-timing-function: linear;
+
+    -o-transition-property: background-position;
+    -o-transition-duration: 1s;
+    -o-transition-timing-function: linear;
 }
 
 @-webkit-keyframes fire {
@@ -183,6 +190,10 @@ div.gameobject {
     -moz-transition-property: opacity, top, left;
     -moz-transition-duration: 1s, .1s, .1s;
     -moz-transition-timing-function: linear;
+
+    -o-transition-property: opacity, top, left;
+    -o-transition-duration: 1s, .1s, .1s;
+    -o-transition-timing-function: linear;
 }
 
 #finishedlevelanimation {
@@ -192,40 +203,58 @@ div.gameobject {
     right: -50;
     width: 40px;
     height: 40px;
+
     -webkit-transition-property: -webkit-transform, top, left;
     -webkit-transition-duration: 3s, 3s, 3s;
     -webkit-transition-timing-function: ease-in-out;
 
-    -moz-transition-property: -webkit-transform, top, left;
+    -moz-transition-property: -moz-transform, top, left;
     -moz-transition-duration: 3s, 3s, 3s;
     -moz-transition-timing-function: ease-in-out;
+
+    -o-transition-property: -o-transform, top, left;
+    -o-transition-duration: 3s, 3s, 3s;
+    -o-transition-timing-function: ease-in-out;
 }
 
 #cursor {
     z-index: 5;
     background-image: url('png/cursor_unselected.png');
+
     -webkit-transition-property: top, left, background-image;
     -webkit-transition-duration: .1s, .1s, .2s;
     -webkit-transition-timing-function: linear;
+
     -moz-transition-property: top, left, background-image;
     -moz-transition-duration: .1s, .1s, .2s;
     -moz-transition-timing-function: linear;
+
+    -o-transition-property: top, left, background-image;
+    -o-transition-duration: .1s, .1s, .2s;
+    -o-transition-timing-function: linear;
 }
 
 #M {
     -webkit-transition: top 1s linear;
     -moz-transition: top 1s linear;
+    -o-transition: top 1s linear;
 }
 
 #clock, #score {
     height: 3px;
     width: 0px;
+
     -webkit-transition-property: width background-color;
     -webkit-transition-timing-function: linear;
     -webkit-transition-duration: 0s;
+
     -moz-transition-property: width, background-color;
     -moz-transition-timing-function: linear;
     -moz-transition-duration: 0s;
+
+    -o-transition-property: width, background-color;
+    -o-transition-timing-function: linear;
+    -o-transition-duration: 0s;
 }
 
 #clock {
@@ -237,6 +266,7 @@ div.gameobject {
     background-color: orange;
     -webkit-transition-duration: 1s;
     -moz-transition-duration: 1s;
+    -o-transition-duration: 1s;
 }
 
 #restartLevel
@@ -273,6 +303,7 @@ div.gameobject {
     top: -14em;
 
     border: 1px solid gray;
+
     -webkit-transition-property: opacity, top;
     -webkit-transition-duration: 3s, 2s;
     -webkit-border-radius: 10px;
@@ -282,6 +313,9 @@ div.gameobject {
     -moz-transition-duration: 3s, 2s;
     -moz-border-radius: 10px;
     -moz-box-shadow: 10px 10px 9px gray;
+
+    -o-transition-property: opacity, top;
+    -o-transition-duration: 3s, 2s;
 }
 
 #debug, #editor {
@@ -324,12 +358,17 @@ div.gameobject {
     font-weight: bolder;
     width: 100%;
     text-align: center;
+
     -webkit-transition-duration: 50s;
     -webkit-transition-timing-function: linear;
     -webkit-border-radius: 10px;
+
     -moz-transition-duration: 50s;
     -moz-transition-timing-function: linear;
     -moz-border-radius: 10px;
+
+    -o-transition-duration: 50s;
+    -o-transition-timing-function: linear;
 }
 #credits p#creditsheader {
     font-size: 36pt;

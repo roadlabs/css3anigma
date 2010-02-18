@@ -84,22 +84,14 @@ function checkForTransitionSupport()
 {
     var cssTransitionsSupported = false;
     var div = document.createElement('div');
-    div.innerHTML = '<div style="-webkit-transition:color 1s linear;-moz-transition:color 1s linear;"></div>';
-    cssTransitionsSupported = (div.firstChild.style.webkitTransition !== undefined) || (div.firstChild.style.mozTransition !== undefined);
+    div.innerHTML = '<div style="-webkit-transition:color 1s linear;-o-transition:color 1s linear;-moz-transition:color 1s linear;"></div>';
+    cssTransitionsSupported = 
+        (div.firstChild.style.webkitTransition !== undefined)
+        || (div.firstChild.style.oTransition !== undefined)
+        || (div.firstChild.style.MozTransition !== undefined);
     delete div;
-    return cssTransitionsSupported;
-}
-
-
-function checkForWebKitBrowser()
-{
-    var regexp = /WebKit\/([\d.]+)/;
-    if (!regexp.exec(navigator.userAgent)) {
-        /*var regexp = /Minefield/;
-        if (regexp.exec(navigator.userAgent)) {
-            return true;
-        }*/
-        showMessageBox('Sorry, Anigma requires a WebKit browser such as <a href="http://www.apple.com/safari/">Safari</a>, <a href="http://www.google.com/chrome">Chrome</a>, or <a href="http://arora-browser.org">Arora</a><small>  (Firefox nightly might work)</small>');
+    if (!cssTransitionsSupported) {
+        showMessageBox('Sorry, Anigma requires a WebKit browser such as <a href="http://www.apple.com/safari/">Safari</a>, <a href="http://www.google.com/chrome">Chrome</a>, or <a href="http://arora-browser.org">Arora</a><small>  (Firefox Nightly & Opera Beta mostly work)</small>');
     }
 }
 
@@ -211,8 +203,11 @@ function removeJewel(node)
         checkLevel();
     };
     node.removeEventListener('webkitTransitionEnd', movementTransitionDone, false);
-    node.removeEventListener('webkitTransitionEnd', f, false);
+    node.removeEventListener('transitionend', f, false);
+    node.removeEventListener('oTransitionEnd', f, false);
     node.addEventListener('webkitTransitionEnd', f, false);
+    node.addEventListener('transitionend', f, false);
+    node.addEventListener('oTransitionEnd', f, false);
     node.style.opacity = 0;
 }
 
@@ -242,7 +237,7 @@ function checkGravityOnNode(node)
         removeJewel(node);
         bNode.id = 'W';
         bNode.style.webkitBackgroundSize = size + 'px ' + size + 'px';
-        bNode.style.mozBackgroundSize = size + 'px ' + size + 'px';
+        bNode.style.MozBackgroundSize = size + 'px ' + size + 'px';
         bNode = NaN;
     }
 
@@ -301,9 +296,9 @@ function startLevelAnimations()
     clock.style.webkitTransitionDuration = clock.time + 's';
     clock.style.webkitTransitionProperty = 'width, background-color';
     clock.addEventListener('webkitTransitionEnd', outOfTime, false);
-    clock.style.mozTransitionDuration = clock.time + 's';
-    clock.style.mozTransitionProperty = 'width, background-color';
-    clock.addEventListener('mozTransitionEnd', outOfTime, false);
+    clock.style.MozTransitionDuration = clock.time + 's';
+    clock.style.MozTransitionProperty = 'width, background-color';
+    clock.addEventListener('transitionend', outOfTime, false);
     checkGravity();
 }
 
@@ -598,7 +593,7 @@ function loadLevelFile(level)
     board.appendChild(cursor);
     cursor.selected = true;
     cursor.style.webkitBackgroundSize = size + 'px ' + size + 'px';
-    cursor.style.mozBackgroundSize = size + 'px ' + size + 'px';
+    cursor.style.MozBackgroundSize = size + 'px ' + size + 'px';
     cursor.style.top = 0;
     cursor.style.left = 0;
     toggleSelection();
@@ -638,12 +633,12 @@ function loadLevelFile(level)
             switch(row[j]) {
             case 'C':
                 item.addEventListener('webkitAnimationEnd', itemAnimationEnd, false);
-                item.addEventListener('mozAnimationEnd', itemAnimationEnd, false);
+                item.addEventListener('animationend', itemAnimationEnd, false);
                 break;
 
             case 'F':
                 item.style.webkitBackgroundSize = 10 * size + 'px ' + size + 'px';
-                item.style.mozBackgroundSize = 10 * size + 'px ' + size + 'px';
+                item.style.MozBackgroundSize = 10 * size + 'px ' + size + 'px';
                 break;
 
             case 'W':
@@ -677,10 +672,11 @@ function loadLevelFile(level)
                     item.style.backgroundImage = 'url("png/jewel_gray.png")'; break;
                 }
                 item.addEventListener('webkitTransitionEnd', movementTransitionDone, false);
-                item.addEventListener('mozTransitionEnd', movementTransitionDone, false);
+                item.addEventListener('transitionend', movementTransitionDone, false);
+                item.addEventListener('oTransitionEnd', movementTransitionDone, false);
                 item.addEventListener('click', clickedOnJewel, false);
                 item.style.webkitBackgroundSize = size + 'px ' + size + 'px';
-                item.style.mozBackgroundSize = size + 'px ' + size + 'px';
+                item.style.MozBackgroundSize = size + 'px ' + size + 'px';
                 item.style.backgroundSize = size + 'px ' + size + 'px';
                 break;
 
@@ -688,7 +684,8 @@ function loadLevelFile(level)
                 item.style.webkitBackgroundSize = size + 'px ' + size + 'px';
                 item.closed = false;
                 item.addEventListener('webkitTransitionEnd', function() { this.id = 'W'; }, false);
-                item.addEventListener('mozTransitionEnd', function() { this.id = 'W'; }, false);
+                item.addEventListener('transitionend', function() { this.id = 'W'; }, false);
+                item.addEventListener('oTransitionEnd', function() { this.id = 'W'; }, false);
                 break;
 
             case 'M':
@@ -732,7 +729,8 @@ function loadLevelFile(level)
         clock.time = 35;
     }
     clock.style.webkitTransitionDuration = '0s';
-    clock.style.mozTransitionDuration = '0s';
+    clock.style.MozTransitionDuration = '0s';
+    clock.style.oTransitionDuration = '0s';
     clock.style.width = '100%';
     clock.style.backgroundColor = 'white';
     setTimeout(startLevelAnimations, 100);
@@ -819,12 +817,14 @@ function endLevelAnimation()
         completedAnimation.direction = 1;
         completedAnimation.style.left = document.body.clientWidth;
         completedAnimation.style.webkitTransform = 'rotate(360deg)';
-        completedAnimation.style.mozTransform = 'rotate(360deg)';
+        completedAnimation.style.MozTransform = 'rotate(360deg)';
+        completedAnimation.style.oTransform = 'rotate(360deg)';
     } else {
         completedAnimation.direction = 0;
         completedAnimation.style.left = -50;
         completedAnimation.style.webkitTransform = 'rotate(-360deg)';
-        completedAnimation.style.mozTransform = 'rotate(-360deg)';
+        completedAnimation.style.MozTransform = 'rotate(-360deg)';
+        completedAnimation.style.oTransform = 'rotate(-360deg)';
     }
 }
 
@@ -887,7 +887,7 @@ function loadGame()
         gamebox.style.marginTop = 0;
     }
 
-    checkForWebKitBrowser();
+    checkForTransitionSupport();
 
     score = 0;
     size = 40;
@@ -907,6 +907,8 @@ function loadGame()
 
     var completedNode = document.getElementById('finishedlevelanimation');
     completedNode.addEventListener('webkitTransitionEnd', loadLevel, false);
+    completedNode.addEventListener('transitionend', loadLevel, false);
+    completedNode.addEventListener('oTransitionEnd', loadLevel, false);
     completedNode.direction = 0;
 
     currentLevel = parseInt(getCookie('level'), 10);
