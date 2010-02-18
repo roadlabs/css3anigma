@@ -293,7 +293,6 @@ function startLevelAnimations()
         }
         node.style.top = node.endAnimationY;
     }
-    clock.style.width = '0px';
     clock.style.backgroundColor = 'red';
     clock.style.webkitTransitionDuration = clock.time + 's';
     clock.style.webkitTransitionProperty = 'width, background-color';
@@ -301,6 +300,7 @@ function startLevelAnimations()
     clock.style.MozTransitionDuration = clock.time + 's';
     clock.style.MozTransitionProperty = 'width, background-color';
     clock.addEventListener('transitionend', outOfTime, false);
+    clock.style.width = '0px';
     checkGravity();
 }
 
@@ -730,11 +730,11 @@ function loadLevelFile(level)
     if (clock.time < 35) {
         clock.time = 35;
     }
+    clock.style.width = '100%';
+    clock.style.backgroundColor = 'white';
     clock.style.webkitTransitionDuration = '0s';
     clock.style.MozTransitionDuration = '0s';
     clock.style.oTransitionDuration = '0s';
-    clock.style.width = '100%';
-    clock.style.backgroundColor = 'white';
     setTimeout(startLevelAnimations, 100);
     levelCompleted = false;
     toggleSelection();
