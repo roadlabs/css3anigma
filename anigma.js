@@ -182,7 +182,9 @@ function toggleSelection()
         cursor.style.backgroundImage = 'url("png/cursor_unselected.png")';
     } else {
         var node = getGameElementAt(nodeLeft(cursor), nodeTop(cursor));
-        selectJewel(node);
+        // don't select jewels that are being removed
+        if (node && node.style.opacity != 0)
+            selectJewel(node);
     }
 }
 
