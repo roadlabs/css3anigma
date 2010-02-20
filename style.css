@@ -244,7 +244,7 @@ div.gameobject {
     height: 3px;
     width: 0px;
 
-    -webkit-transition-property: width background-color;
+    -webkit-transition-property: width, background-color;
     -webkit-transition-timing-function: linear;
     -webkit-transition-duration: 0s;
 
