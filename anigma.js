@@ -769,8 +769,6 @@ function restartLevel()
     if (document.getElementById('debug').style.display !== 'none') {
         var input = document.getElementById('level');
         currentLevel = input.value;
-    } else if (score < 0) {
-        return;
     }
 
     changeScore(-10);
