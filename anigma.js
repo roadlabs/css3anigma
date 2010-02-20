@@ -85,7 +85,7 @@ function checkForTransitionSupport()
     var cssTransitionsSupported = false;
     var div = document.createElement('div');
     div.innerHTML = '<div style="-webkit-transition:color 1s linear;-o-transition:color 1s linear;-moz-transition:color 1s linear;"></div>';
-    cssTransitionsSupported = 
+    cssTransitionsSupported =
         (div.firstChild.style.webkitTransition !== undefined)
         || (div.firstChild.style.oTransition !== undefined)
         || (div.firstChild.style.MozTransition !== undefined);
