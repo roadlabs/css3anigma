@@ -183,8 +183,9 @@ function toggleSelection()
     } else {
         var node = getGameElementAt(nodeLeft(cursor), nodeTop(cursor));
         // don't select jewels that are being removed
-        if (node && node.style.opacity != 0)
+        if (node && !node.removing) {
             selectJewel(node);
+        }
     }
 }
 
@@ -594,16 +595,19 @@ function loadLevelFile(level)
     }
 
     cursor = document.createElement('div');
+    cursor.addEventListener('click', function() { toggleSelection(); }, false);
     cursor.className = 'gameobject';
     cursor.id = 'cursor';
     cursor.style.width = size;
     cursor.style.height = size;
     board.appendChild(cursor);
-    cursor.selected = true;
     cursor.style.webkitBackgroundSize = size + 'px ' + size + 'px';
     cursor.style.MozBackgroundSize = size + 'px ' + size + 'px';
     cursor.style.top = 0;
     cursor.style.left = 0;
+
+    // init the cursor as unselected
+    cursor.selected = true;
     toggleSelection();
 
     var rows = level.split('\n');
@@ -631,7 +635,11 @@ function loadLevelFile(level)
         for (var j = 0; j < row.length; ++j) {
             width = size * row.length;
             if (row[j] === '.') {
-               continue;
+                if (cursor.style.top == "0px") {
+                    cursor.style.top = i * size;
+                    cursor.style.left = j * size;
+                }
+                continue;
             }
 
             var item = document.createElement('div');
@@ -743,7 +751,6 @@ function loadLevelFile(level)
     clock.style.oTransitionDuration = '0s';
     setTimeout(startLevelAnimations, 100);
     levelCompleted = false;
-    toggleSelection();
 }
 
 function loadLevel()
