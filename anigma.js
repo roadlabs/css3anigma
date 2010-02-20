@@ -755,7 +755,6 @@ function loadLevel()
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState === 4) {
-            loadLevelFile(xmlhttp.responseText);
             if (xmlhttp.status !== 200 && xmlhttp.status !== 0) {
                 currentLevel = 1;
                 loadLevel();
