@@ -733,8 +733,8 @@ function loadLevelFile(level)
 
     board.style.width = width;
     clock.time = parseInt(rows[0].split('-')[3], 10) * 4;
-    if (clock.time < 35) {
-        clock.time = 35;
+    if (clock.time < 45) {
+        clock.time = 45;
     }
     clock.style.width = '100%';
     clock.style.backgroundColor = 'white';
