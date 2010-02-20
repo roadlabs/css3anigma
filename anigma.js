@@ -87,7 +87,7 @@ function checkForTransitionSupport()
     div.innerHTML = '<div style="-webkit-transition:color 1s linear;-o-transition:color 1s linear;-moz-transition:color 1s linear;"></div>';
     cssTransitionsSupported =
         (div.firstChild.style.webkitTransition !== undefined)
-        || (div.firstChild.style.oTransition !== undefined)
+        || (div.firstChild.style.OTransition !== undefined)
         || (div.firstChild.style.MozTransition !== undefined);
     delete div;
     if (!cssTransitionsSupported) {
@@ -209,10 +209,10 @@ function removeJewel(node)
 
     node.removeEventListener('webkitTransitionEnd', movementTransitionDone, false);
     node.removeEventListener('transitionend', movementTransitionDone, false);
-    node.removeEventListener('oTransitionEnd', movementTransitionDone, false);
+    node.removeEventListener('OTransitionEnd', movementTransitionDone, false);
     node.addEventListener('webkitTransitionEnd', animateRemovalDone, false);
     node.addEventListener('transitionend', animateRemovalDone, false);
-    node.addEventListener('oTransitionEnd', animateRemovalDone, false);
+    node.addEventListener('OTransitionEnd', animateRemovalDone, false);
     node.style.opacity = 0;
     node.removing = true;
 }
@@ -669,7 +669,7 @@ function loadLevelFile(level)
                 }
                 item.addEventListener('webkitTransitionEnd', movementTransitionDone, false);
                 item.addEventListener('transitionend', movementTransitionDone, false);
-                item.addEventListener('oTransitionEnd', movementTransitionDone, false);
+                item.addEventListener('OTransitionEnd', movementTransitionDone, false);
                 item.addEventListener('click', clickedOnJewel, false);
                 item.style.webkitBackgroundSize = size + 'px ' + size + 'px';
                 item.style.MozBackgroundSize = size + 'px ' + size + 'px';
@@ -681,7 +681,7 @@ function loadLevelFile(level)
                 item.closed = false;
                 item.addEventListener('webkitTransitionEnd', function() { this.id = 'W'; }, false);
                 item.addEventListener('transitionend', function() { this.id = 'W'; }, false);
-                item.addEventListener('oTransitionEnd', function() { this.id = 'W'; }, false);
+                item.addEventListener('OTransitionEnd', function() { this.id = 'W'; }, false);
                 break;
 
             case 'M':
@@ -728,7 +728,7 @@ function loadLevelFile(level)
     // turnoff the duration
     clock.style.webkitTransitionDuration = '0';
     clock.style.MozTransitionDuration = '0';
-    clock.style.oTransitionDuration = '0';
+    clock.style.OTransitionDuration = '0';
 
     // reset bg color and width
     clock.style.backgroundColor = 'white';
@@ -740,7 +740,7 @@ function loadLevelFile(level)
     // turn back on duration
     clock.style.webkitTransitionDuration = clock.time + 's';
     clock.style.MozTransitionDuration = clock.time + 's';
-    clock.style.oTransitionDuration = clock.time + 's';
+    clock.style.OTransitionDuration = clock.time + 's';
 
     // start animating to 0
     clock.style.backgroundColor = 'red';
@@ -827,13 +827,13 @@ function endLevelAnimation()
         completedAnimation.style.left = document.body.clientWidth;
         completedAnimation.style.webkitTransform = 'rotate(360deg)';
         completedAnimation.style.MozTransform = 'rotate(360deg)';
-        completedAnimation.style.oTransform = 'rotate(360deg)';
+        completedAnimation.style.OTransform = 'rotate(360deg)';
     } else {
         completedAnimation.direction = 0;
         completedAnimation.style.left = -50;
         completedAnimation.style.webkitTransform = 'rotate(-360deg)';
         completedAnimation.style.MozTransform = 'rotate(-360deg)';
-        completedAnimation.style.oTransform = 'rotate(-360deg)';
+        completedAnimation.style.OTransform = 'rotate(-360deg)';
     }
 }
 
@@ -912,7 +912,7 @@ function loadGame()
 
     clock = document.getElementById('clock');
     clock.addEventListener('webkitTransitionEnd', outOfTime, false);
-    clock.addEventListener('oTransitionEnd', outOfTime, false);
+    clock.addEventListener('OTransitionEnd', outOfTime, false);
     clock.addEventListener('transitionend', outOfTime, false);
 
     var credits = document.getElementById('credits');
@@ -921,7 +921,7 @@ function loadGame()
     var completedNode = document.getElementById('finishedlevelanimation');
     completedNode.addEventListener('webkitTransitionEnd', loadLevel, false);
     completedNode.addEventListener('transitionend', loadLevel, false);
-    completedNode.addEventListener('oTransitionEnd', loadLevel, false);
+    completedNode.addEventListener('OTransitionEnd', loadLevel, false);
     completedNode.direction = 0;
 
     currentLevel = parseInt(getCookie('level'), 10);
