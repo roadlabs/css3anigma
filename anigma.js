@@ -288,26 +288,6 @@ function checkGravity()
     }
 }
 
-function startLevelAnimations()
-{
-    for (var i = 0; i < board.childNodes.length; ++i) {
-        var node = board.childNodes[i];
-        if (node.id !== 'M') {
-            continue;
-        }
-        node.style.top = node.endAnimationY;
-    }
-    clock.style.backgroundColor = 'red';
-    clock.style.webkitTransitionDuration = clock.time + 's';
-    clock.style.webkitTransitionProperty = 'width, background-color';
-    clock.addEventListener('webkitTransitionEnd', outOfTime, false);
-    clock.style.MozTransitionDuration = clock.time + 's';
-    clock.style.MozTransitionProperty = 'width, background-color';
-    clock.addEventListener('transitionend', outOfTime, false);
-    clock.style.width = '0px';
-    checkGravity();
-}
-
 function itemAnimationEnd()
 {
     this.parentNode.removeChild(this);
@@ -744,12 +724,29 @@ function loadLevelFile(level)
     if (clock.time < 45) {
         clock.time = 45;
     }
-    clock.style.width = '100%';
+
+    // turnoff the duration
+    clock.style.webkitTransitionDuration = '0';
+    clock.style.MozTransitionDuration = '0';
+    clock.style.oTransitionDuration = '0';
+
+    // reset bg color and width
     clock.style.backgroundColor = 'white';
-    clock.style.webkitTransitionDuration = '0s';
-    clock.style.MozTransitionDuration = '0s';
-    clock.style.oTransitionDuration = '0s';
-    setTimeout(startLevelAnimations, 100);
+    clock.style.width = '100%';
+
+    // force rendering engine to set width/color
+    window.getComputedStyle(clock, null).width;
+
+    // turn back on duration
+    clock.style.webkitTransitionDuration = clock.time + 's';
+    clock.style.MozTransitionDuration = clock.time + 's';
+    clock.style.oTransitionDuration = clock.time + 's';
+
+    // start animating to 0
+    clock.style.backgroundColor = 'red';
+    clock.style.width = '0%';
+
+    checkGravity();
     levelCompleted = false;
 }
 
@@ -911,9 +908,13 @@ function loadGame()
     levelDisplay = document.getElementById('currentLevel');
     board = document.getElementById('board');
     board.addEventListener('click', clickedOnBoard, false);
-    clock = document.getElementById('clock');
     cursor = document.getElementById('cursor');
     document.getElementById('debug').style.display = 'none';
+
+    clock = document.getElementById('clock');
+    clock.addEventListener('webkitTransitionEnd', outOfTime, false);
+    clock.addEventListener('oTransitionEnd', outOfTime, false);
+    clock.addEventListener('transitionend', outOfTime, false);
 
     var credits = document.getElementById('credits');
     credits.addEventListener('webkitTransitionEnd', restartGame, false);
