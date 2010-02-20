@@ -213,6 +213,7 @@ function removeJewel(node)
     node.addEventListener('transitionend', animateRemovalDone, false);
     node.addEventListener('oTransitionEnd', animateRemovalDone, false);
     node.style.opacity = 0;
+    node.removing = true;
 }
 
 function checkGravityOnNode(node)
@@ -357,6 +358,9 @@ function getGameElementAt(x, y)
 
 function checkElement(node)
 {
+    if (node.removing)
+        return;
+
     if (checkGravityOnNode(node)) {
         checkGravity();
         return;
@@ -367,7 +371,7 @@ function checkElement(node)
     var removed = false;
 
     var bNode = getGameElementAt(x, y + size);
-    if (bNode && bNode.id === node.id) {
+    if (bNode && bNode.id === node.id && !bNode.removing) {
         removeJewel(bNode);
         removed = true;
     }
@@ -378,13 +382,13 @@ function checkElement(node)
     }
 
     var leftNode = getGameElementAt(x - size, y);
-    if (leftNode && leftNode.id === node.id) {
+    if (leftNode && leftNode.id === node.id && !leftNode.removing) {
         removeJewel(leftNode);
         removed = true;
     }
 
     var rNode = getGameElementAt(x + size, y);
-    if (rNode && rNode.id === node.id) {
+    if (rNode && rNode.id === node.id && !rNode.removing) {
         removeJewel(rNode);
         removed = true;
     }
