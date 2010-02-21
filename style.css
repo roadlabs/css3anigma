@@ -242,19 +242,19 @@ div.gameobject {
 
 #clock, #score {
     height: 3px;
-    width: 0px;
+    width: 0%;
 
     -webkit-transition-property: width, background-color;
     -webkit-transition-timing-function: linear;
-    -webkit-transition-duration: 0s;
+    -webkit-transition-duration: 0.1s;
 
     -moz-transition-property: width, background-color;
     -moz-transition-timing-function: linear;
-    -moz-transition-duration: 0s;
+    -moz-transition-duration: 0.1s;
 
     -o-transition-property: width, background-color;
     -o-transition-timing-function: linear;
-    -o-transition-duration: 0s;
+    -o-transition-duration: 0.1s;
 }
 
 #clock {

@@ -148,13 +148,27 @@ function checkLevel()
     }
 }
 
-function outOfTime()
+function outOfTime(event)
 {
-    if (levelCompleted) {
+    if (event.propertyName !== 'width') {
         return;
     }
-    showMessageBox('Out of Time!');
-    changeScore(-10);
+    if (clock.style.width === '100%') {
+        // turn back on duration
+        clock.style.webkitTransitionDuration = clock.time + 's';
+        clock.style.MozTransitionDuration = clock.time + 's';
+        clock.style.OTransitionDuration = clock.time + 's';
+
+        // start animating to 0
+        clock.style.backgroundColor = 'red';
+        clock.style.width = '0%';
+    } else {
+        if (levelCompleted) {
+            return;
+        }
+        showMessageBox('Out of Time!');
+        changeScore(-10);
+    }
 }
 
 function selectJewel(node)
@@ -725,18 +739,25 @@ function loadLevelFile(level)
         clock.time = 45;
     }
 
-    // turnoff the duration
-    clock.style.webkitTransitionDuration = '0';
-    clock.style.MozTransitionDuration = '0';
-    clock.style.OTransitionDuration = '0';
+    if (clock.style.width === '100%') {
+        outOfTime();
+    } else {
+        // turnoff the duration
+        clock.style.webkitTransitionDuration = '1s';
+        clock.style.MozTransitionDuration = '1s';
+        clock.style.OTransitionDuration = '1s';
 
-    // reset bg color and width
-    clock.style.backgroundColor = 'white';
-    clock.style.width = '100%';
+        // reset bg color and width
+        clock.style.backgroundColor = 'white';
+        clock.style.width = '100%';
+    }
 
-    // force rendering engine to set width/color
-    window.getComputedStyle(clock, null).width;
+    checkGravity();
+    levelCompleted = false;
+}
 
+function resetClockDone()
+{
     // turn back on duration
     clock.style.webkitTransitionDuration = clock.time + 's';
     clock.style.MozTransitionDuration = clock.time + 's';
@@ -745,9 +766,6 @@ function loadLevelFile(level)
     // start animating to 0
     clock.style.backgroundColor = 'red';
     clock.style.width = '0%';
-
-    checkGravity();
-    levelCompleted = false;
 }
 
 function loadLevel()
