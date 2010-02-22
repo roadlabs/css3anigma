@@ -10,6 +10,15 @@ a:visited {color:white;}
 a:hover {color:white;}
 a:active {color:white;}
 
+#adsense {
+    margin: 0, auto;
+    padding: 0;
+    padding-top: 2em;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
 #game {
     background-repeat: no-repeat;
     margin: 0 auto;
